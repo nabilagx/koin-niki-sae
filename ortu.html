@@ -2,7 +2,18 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  
+  <!-- PWA & Standalone Meta Tags -->
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="KOIN Ortu"/>
+  <meta name="theme-color" content="#0F1E3D"/>
+  
+  <!-- Inline Manifest -->
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22KOIN%20Dashboard%20Ortu%22%2C%22short_name%22%3A%22KOIN%20Ortu%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230F1E3D%22%2C%22theme_color%22%3A%22%230F1E3D%22%7D"/>
+
   <title>KOIN — Dashboard Orang Tua</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -16,16 +27,16 @@
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--navy);color:#fff;display:flex;min-height:100vh;overflow:hidden;}
     .fredoka{font-family:'Fredoka One',cursive;}
-    ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
+    ::-webkit-scrollbar{width:4px; height:4px;} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
 
     /* SIDEBAR */
-    #sidebar{width:230px;min-height:100vh;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:30;}
+    #sidebar{width:230px;min-height:100vh;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:50;}
     .nav-link{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:12px;font-size:0.82rem;font-weight:600;color:rgba(255,255,255,0.42);cursor:pointer;transition:all .18s;border:1px solid transparent;}
     .nav-link:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.78);}
     .nav-link.active{background:rgba(255,214,10,0.1);color:var(--yellow);border-color:rgba(255,214,10,0.18);}
 
     /* TOPBAR */
-    #topbar{background:rgba(15,30,61,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+    #topbar{background:rgba(15,30,61,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40; padding-top: env(safe-area-inset-top);}
 
     /* CARDS */
     .stat-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;transition:transform .2s,border-color .2s;}
@@ -36,6 +47,8 @@
     .stat-card.pink{background:linear-gradient(135deg,rgba(255,77,141,0.1),rgba(255,77,141,0.03));border-color:rgba(255,77,141,0.18);}
 
     /* TABLE */
+    .table-wrap{overflow-x:auto; width:100%;}
+    .dt{width:100%;border-collapse:collapse; min-width:600px;}
     .dt th{padding:9px 14px;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.28);border-bottom:1px solid var(--border);text-align:left;}
     .dt td{padding:12px 14px;font-size:0.8rem;border-bottom:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.78);}
     .dt tr:hover td{background:rgba(255,255,255,0.025);}
@@ -68,7 +81,8 @@
     .ib{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
 
     /* ====== TOAST ====== */
-    #toastContainer{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
+    #toastContainer{position:fixed;top:env(safe-area-inset-top, 18px);right:18px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;margin-top:18px;}
+    @media(max-width:768px){ #toastContainer{left:18px;} .toast{min-width:auto; width:100%; max-width:100%;} }
     .toast{
       display:flex;align-items:flex-start;gap:12px;
       background:rgba(22,36,68,0.96);
@@ -112,7 +126,7 @@
     .chart-label{font-size:.6rem;color:rgba(255,255,255,0.35);font-weight:700;text-align:center;margin-top:5px;}
 
     /* AI insight card */
-    .ai-card{background:linear-gradient(135deg,rgba(123,47,190,0.18),rgba(45,27,105,0.1));border:1px solid rgba(123,47,190,0.25);border-radius:18px;padding:18px;}
+    .ai-card{background:linear-gradient(135deg,rgba(123,47,190,0.18),rgba(45,27,105,0.1));border:1px solid rgba(123,47,190,0.25);border-radius:18px;padding:18px; transition:all 0.5s ease;}
 
     /* Settings toggle */
     .toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
@@ -122,10 +136,23 @@
     .toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.25s;pointer-events:none;}
     .toggle input:checked ~ .toggle-thumb{left:23px;}
 
+    /* RESPONSIVE GRIDS */
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+    .grid-ai{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;}
+    .grid-overview{display:grid; grid-template-columns:1fr 320px; gap:16px;}
+
+    @media(max-width:992px){
+      .grid-overview{grid-template-columns:1fr;}
+    }
+
     @media(max-width:768px){
       #sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .25s;}
       #sidebar.open{transform:translateX(0);}
       #mob-overlay{display:block!important;}
+      
+      .grid-2, .grid-ai {grid-template-columns:1fr;}
+      main {padding: 20px 5% 100px !important;} /* Extra bottom padding for mobile scrolling */
+      #topbar {padding: 0 5%;}
     }
   </style>
 </head>
@@ -171,7 +198,7 @@
     <div id="nav-limit"     class="nav-link"         onclick="showPage('limit')"><span>🎯</span>Atur Limit</div>
     <div id="nav-ai"        class="nav-link"         onclick="showPage('ai')">
       <span>🤖</span>AI Insight
-      <span style="background:var(--purple);color:#fff;font-size:0.52rem;padding:2px 7px;border-radius:999px;margin-left:auto;font-weight:700;">PRO</span>
+      <span id="aiBadgePro" style="background:var(--purple);color:#fff;font-size:0.52rem;padding:2px 7px;border-radius:999px;margin-left:auto;font-weight:800; transition:all 0.3s;">PRO</span>
     </div>
     <p style="color:rgba(255,255,255,0.18);font-size:0.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:0 8px;margin:10px 0 6px;">Lainnya</p>
     <div id="nav-notif"     class="nav-link"         onclick="showPage('notif')">
@@ -195,7 +222,7 @@
   </div>
 </aside>
 
-<div id="mob-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:25;" onclick="toggleSidebar()"></div>
+<div id="mob-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:45;" onclick="toggleSidebar()"></div>
 
 <!-- ===== MAIN ===== -->
 <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;">
@@ -220,7 +247,7 @@
   </header>
 
   <div style="flex:1;overflow-y:auto;overflow-x:hidden;">
-  <main style="padding:24px 28px;max-width:1100px;width:100%;">
+  <main style="padding:24px 28px;max-width:1100px;width:100%;margin:0 auto;">
 
     <!-- ======= PAGE: RINGKASAN ======= -->
     <div id="page-ringkasan" class="page active">
@@ -229,7 +256,7 @@
         <p style="color:rgba(255,255,255,0.38);font-size:0.8rem;margin-top:4px;">Dafi sudah pakai <strong style="color:var(--yellow);">Rp15.000</strong> dari limit harian hari ini.</p>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:22px;">
         <div class="stat-card gold" id="t-saldo">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
                 <p style="font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.08em;">Saldo Master</p>
@@ -271,7 +298,7 @@
       </div>
 
       <!-- Chart + misi -->
-      <div style="display:grid;grid-template-columns:1fr 320px;gap:16px;">
+      <div class="grid-overview">
         <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;" id="t-chart">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
             <div><h3 style="font-size:0.9rem;font-weight:800;">Pengeluaran 7 Hari</h3><p style="font-size:0.68rem;color:rgba(255,255,255,0.32);margin-top:2px;">Dalam ribuan rupiah</p></div>
@@ -313,7 +340,7 @@
 
     <!-- ======= PAGE: RIWAYAT ======= -->
     <div id="page-riwayat" class="page">
-      <div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:gap;">
+      <div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;">
         <div><h2 style="font-size:1.2rem;font-weight:800;">Riwayat Transaksi</h2><p style="color:rgba(255,255,255,0.38);font-size:0.78rem;margin-top:3px;">Semua aktivitas jajan Dafi</p></div>
         <button onclick="showToast('success','📥','Export Berhasil','File CSV berhasil diunduh.')" style="background:rgba(255,214,10,0.1);border:1px solid rgba(255,214,10,0.2);color:var(--yellow);font-size:0.72rem;font-weight:700;padding:8px 16px;border-radius:10px;cursor:pointer;font-family:inherit;">📥 Export CSV</button>
       </div>
@@ -324,18 +351,21 @@
         <button onclick="filterTx(this,'keluar')" class="tx-filter" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:rgba(255,255,255,0.45);font-size:0.72rem;font-weight:700;padding:7px 16px;border-radius:99px;cursor:pointer;font-family:inherit;">Keluar</button>
         <input type="date" class="fi" style="width:auto;padding:7px 12px;font-size:0.72rem;margin-left:auto;" value="2025-06-26"/>
       </div>
+      
       <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;">
-        <table class="dt" style="width:100%;border-collapse:collapse;">
-          <thead><tr><th>Merchant</th><th>Waktu</th><th>Metode</th><th style="text-align:right;">Jumlah</th><th style="text-align:center;">Status</th></tr></thead>
-          <tbody id="txBody">
-            <tr class="tx-row" data-type="keluar"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(255,107,53,0.14);">🍱</div><div><p style="font-weight:700;font-size:0.8rem;">Kantin Bu Yati</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">SDN 01 Pasuruan</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">08:35 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">QRIS</span></td><td style="text-align:right;font-weight:800;color:#f87171;">−Rp10.000</td><td style="text-align:center;"><span class="badge b-ok">Sukses</span></td></tr>
-            <tr class="tx-row" data-type="keluar"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(6,214,160,0.1);">🥛</div><div><p style="font-weight:700;font-size:0.8rem;">Beli Susu</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">Koperasi Sekolah</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">10:12 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">QRIS</span></td><td style="text-align:right;font-weight:800;color:#f87171;">−Rp5.000</td><td style="text-align:center;"><span class="badge b-ok">Sukses</span></td></tr>
-            <tr class="tx-row" data-type="keluar"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(255,214,10,0.1);">🍭</div><div><p style="font-weight:700;font-size:0.8rem;">Permen & Minuman</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">Warung Pak Slamet</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">12:48 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">QRIS</span></td><td style="text-align:right;font-weight:800;color:#f87171;">−Rp3.000</td><td style="text-align:center;"><span class="badge b-warn">Pending</span></td></tr>
-            <tr class="tx-row" data-type="masuk"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(123,47,190,0.14);">💵</div><div><p style="font-weight:700;font-size:0.8rem;">Top Up Saldo</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">Transfer dari Ayah</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">07:00 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">Transfer</span></td><td style="text-align:right;font-weight:800;color:var(--green);">+Rp20.000</td><td style="text-align:center;"><span class="badge b-ok">Sukses</span></td></tr>
-            <tr class="tx-row" data-type="keluar"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(255,107,53,0.14);">🍜</div><div><p style="font-weight:700;font-size:0.8rem;">Mie Ayam Bu Ningsih</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">Kantin SDN 01</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">Kemarin 11:20 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">QRIS</span></td><td style="text-align:right;font-weight:800;color:#f87171;">−Rp8.000</td><td style="text-align:center;"><span class="badge b-ok">Sukses</span></td></tr>
-            <tr class="tx-row" data-type="keluar"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(56,189,248,0.1);">🧃</div><div><p style="font-weight:700;font-size:0.8rem;">Jus Alpukat</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">Warung Sekolah</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">Kemarin 09:45 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">QRIS</span></td><td style="text-align:right;font-weight:800;color:#f87171;">−Rp6.000</td><td style="text-align:center;"><span class="badge b-err">Gagal</span></td></tr>
-          </tbody>
-        </table>
+        <div class="table-wrap">
+          <table class="dt">
+            <thead><tr><th>Merchant</th><th>Waktu</th><th>Metode</th><th style="text-align:right;">Jumlah</th><th style="text-align:center;">Status</th></tr></thead>
+            <tbody id="txBody">
+              <tr class="tx-row" data-type="keluar"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(255,107,53,0.14);">🍱</div><div><p style="font-weight:700;font-size:0.8rem;">Kantin Bu Yati</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">SDN 01 Pasuruan</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">08:35 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">QRIS</span></td><td style="text-align:right;font-weight:800;color:#f87171;">−Rp10.000</td><td style="text-align:center;"><span class="badge b-ok">Sukses</span></td></tr>
+              <tr class="tx-row" data-type="keluar"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(6,214,160,0.1);">🥛</div><div><p style="font-weight:700;font-size:0.8rem;">Beli Susu</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">Koperasi Sekolah</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">10:12 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">QRIS</span></td><td style="text-align:right;font-weight:800;color:#f87171;">−Rp5.000</td><td style="text-align:center;"><span class="badge b-ok">Sukses</span></td></tr>
+              <tr class="tx-row" data-type="keluar"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(255,214,10,0.1);">🍭</div><div><p style="font-weight:700;font-size:0.8rem;">Permen & Minuman</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">Warung Pak Slamet</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">12:48 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">QRIS</span></td><td style="text-align:right;font-weight:800;color:#f87171;">−Rp3.000</td><td style="text-align:center;"><span class="badge b-warn">Pending</span></td></tr>
+              <tr class="tx-row" data-type="masuk"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(123,47,190,0.14);">💵</div><div><p style="font-weight:700;font-size:0.8rem;">Top Up Saldo</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">Transfer dari Ayah</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">07:00 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">Transfer</span></td><td style="text-align:right;font-weight:800;color:var(--green);">+Rp20.000</td><td style="text-align:center;"><span class="badge b-ok">Sukses</span></td></tr>
+              <tr class="tx-row" data-type="keluar"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(255,107,53,0.14);">🍜</div><div><p style="font-weight:700;font-size:0.8rem;">Mie Ayam Bu Ningsih</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">Kantin SDN 01</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">Kemarin 11:20 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">QRIS</span></td><td style="text-align:right;font-weight:800;color:#f87171;">−Rp8.000</td><td style="text-align:center;"><span class="badge b-ok">Sukses</span></td></tr>
+              <tr class="tx-row" data-type="keluar"><td><div style="display:flex;align-items:center;gap:10px;"><div class="ib" style="background:rgba(56,189,248,0.1);">🧃</div><div><p style="font-weight:700;font-size:0.8rem;">Jus Alpukat</p><p style="font-size:0.62rem;color:rgba(255,255,255,0.32);">Warung Sekolah</p></div></div></td><td style="color:rgba(255,255,255,0.38);font-size:0.74rem;">Kemarin 09:45 WIB</td><td><span style="font-size:0.68rem;color:rgba(255,255,255,0.4);">QRIS</span></td><td style="text-align:right;font-weight:800;color:#f87171;">−Rp6.000</td><td style="text-align:center;"><span class="badge b-err">Gagal</span></td></tr>
+            </tbody>
+          </table>
+        </div>
         <div style="padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
           <p style="font-size:0.68rem;color:rgba(255,255,255,0.28);">6 dari 42 transaksi</p>
           <div style="display:flex;gap:6px;">
@@ -349,7 +379,7 @@
     <!-- ======= PAGE: LIMIT ======= -->
     <div id="page-limit" class="page">
       <div style="margin-bottom:22px;"><h2 style="font-size:1.2rem;font-weight:800;">Atur Limit Jajan</h2><p style="color:rgba(255,255,255,0.38);font-size:0.78rem;margin-top:3px;">Kendalikan pengeluaran anak setiap hari</p></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+      <div class="grid-2">
         <!-- Form -->
         <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;"><div class="ib" style="background:rgba(255,214,10,0.1);font-size:1.2rem;">🎯</div><div><h3 style="font-size:0.92rem;font-weight:800;">Limit Harian</h3><p style="font-size:0.68rem;color:rgba(255,255,255,0.32);margin-top:1px;">Berlaku setiap hari otomatis reset</p></div></div>
@@ -401,37 +431,38 @@
     <!-- ======= PAGE: AI INSIGHT ======= -->
     <div id="page-ai" class="page">
       <div style="margin-bottom:22px;display:flex;align-items:center;gap:10px;">
-        <div><h2 style="font-size:1.2rem;font-weight:800;">AI Insight <span style="background:var(--purple);font-size:0.65rem;padding:3px 10px;border-radius:999px;vertical-align:middle;">PRO</span></h2><p style="color:rgba(255,255,255,0.38);font-size:0.78rem;margin-top:3px;">Analisis cerdas kebiasaan jajan Dafi</p></div>
+        <div><h2 style="font-size:1.2rem;font-weight:800;">AI Insight <span id="pageTitleBadge" style="background:var(--purple);font-size:0.65rem;padding:3px 10px;border-radius:999px;vertical-align:middle;transition:all 0.3s;">PRO</span></h2><p style="color:rgba(255,255,255,0.38);font-size:0.78rem;margin-top:3px;">Analisis cerdas kebiasaan jajan Dafi</p></div>
       </div>
       <!-- Upgrade banner -->
-      <div style="background:linear-gradient(135deg,rgba(123,47,190,0.3),rgba(45,27,105,0.2));border:1px solid rgba(123,47,190,0.35);border-radius:18px;padding:20px;margin-bottom:18px;display:flex;align-items:center;gap:16px;">
+      <div id="upgradeBanner" style="background:linear-gradient(135deg,rgba(123,47,190,0.3),rgba(45,27,105,0.2));border:1px solid rgba(123,47,190,0.35);border-radius:18px;padding:20px;margin-bottom:18px;display:flex;align-items:center;gap:16px; flex-wrap:wrap;">
         <span style="font-size:2.5rem;">🤖</span>
-        <div style="flex:1;"><h3 style="font-size:0.95rem;font-weight:800;color:#c4b5fd;margin-bottom:4px;">Upgrade ke KOIN Premium</h3><p style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.5;">Dapatkan laporan AI mendalam: pola konsumsi, prediksi pengeluaran, saran nutrisi berdasarkan jajanan Dafi.</p></div>
-        <button onclick="showToast('info','🚀','Segera Hadir!','Fitur Premium sedang dalam pengembangan.')" style="background:linear-gradient(135deg,#7b2fbe,#4f46e5);border:none;color:#fff;font-size:0.75rem;font-weight:800;padding:10px 18px;border-radius:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">Upgrade Rp29k/bln</button>
+        <div style="flex:1; min-width:200px;"><h3 style="font-size:0.95rem;font-weight:800;color:#c4b5fd;margin-bottom:4px;">Upgrade ke KOIN Premium</h3><p style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.5;">Dapatkan laporan AI mendalam: pola konsumsi, prediksi pengeluaran, saran nutrisi berdasarkan jajanan Dafi.</p></div>
+        <button onclick="unlockPremium()" style="background:linear-gradient(135deg,#7b2fbe,#4f46e5);border:none;color:#fff;font-size:0.75rem;font-weight:800;padding:10px 18px;border-radius:11px;cursor:pointer;font-family:inherit;white-space:nowrap; transition:transform 0.2s;">Upgrade Rp29k/bln</button>
       </div>
-      <!-- Preview (blurred) insight cards -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
-        <div class="ai-card" style="filter:blur(3px);user-select:none;pointer-events:none;">
+      
+      <!-- Preview (blurred initially) insight cards -->
+      <div class="grid-ai" id="aiCardsContainer">
+        <div class="ai-card" style="filter:blur(4px);user-select:none;pointer-events:none;">
           <p style="font-size:0.65rem;font-weight:800;color:rgba(196,181,253,0.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">🔍 Pola Jajan</p>
           <p style="font-size:1.4rem;font-weight:800;color:#c4b5fd;margin-bottom:4px;">Impulsif 34%</p>
           <p style="font-size:0.74rem;color:rgba(255,255,255,0.45);line-height:1.5;">Dafi cenderung jajan tidak terjadwal di hari Kamis. Puncak pengeluaran pukul 12:00–13:00.</p>
         </div>
-        <div class="ai-card" style="filter:blur(3px);user-select:none;pointer-events:none;">
+        <div class="ai-card" style="filter:blur(4px);user-select:none;pointer-events:none;">
           <p style="font-size:0.65rem;font-weight:800;color:rgba(196,181,253,0.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">🥗 Analisis Nutrisi</p>
           <p style="font-size:1.4rem;font-weight:800;color:#f9a8d4;margin-bottom:4px;">Perlu Perbaikan</p>
           <p style="font-size:0.74rem;color:rgba(255,255,255,0.45);line-height:1.5;">80% jajanan mengandung gula tinggi. Rekomendasikan lebih banyak konsumsi buah & protein.</p>
         </div>
-        <div class="ai-card" style="filter:blur(3px);user-select:none;pointer-events:none;">
+        <div class="ai-card" style="filter:blur(4px);user-select:none;pointer-events:none;">
           <p style="font-size:0.65rem;font-weight:800;color:rgba(196,181,253,0.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">📊 Prediksi Bulan Ini</p>
           <p style="font-size:1.4rem;font-weight:800;color:var(--yellow);margin-bottom:4px;">Rp320.000</p>
           <p style="font-size:0.74rem;color:rgba(255,255,255,0.45);line-height:1.5;">Estimasi total pengeluaran bulan ini berdasarkan tren 14 hari terakhir.</p>
         </div>
-        <div class="ai-card" style="filter:blur(3px);user-select:none;pointer-events:none;">
+        <div class="ai-card" style="filter:blur(4px);user-select:none;pointer-events:none;">
           <p style="font-size:0.65rem;font-weight:800;color:rgba(196,181,253,0.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">💡 Saran AI</p>
           <p style="font-size:0.85rem;font-weight:800;color:rgba(255,255,255,0.8);line-height:1.5;">Coba aktifkan "Misi Sehat" untuk mendorong Dafi memilih kantin dengan menu bergizi.</p>
         </div>
       </div>
-      <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:0.75rem;font-weight:600;">🔒 Upgrade untuk membuka semua insight</div>
+      <div id="upgradeLockText" style="text-align:center;color:rgba(255,255,255,0.3);font-size:0.75rem;font-weight:600;transition:opacity 0.3s;">🔒 Upgrade untuk membuka semua insight</div>
     </div>
 
     <!-- ======= PAGE: NOTIFIKASI ======= -->
@@ -470,7 +501,7 @@
     <!-- ======= PAGE: SETTINGS ======= -->
     <div id="page-settings" class="page">
       <div style="margin-bottom:22px;"><h2 style="font-size:1.2rem;font-weight:800;">Pengaturan</h2><p style="color:rgba(255,255,255,0.38);font-size:0.78rem;margin-top:3px;">Kelola akun dan preferensi kamu</p></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="grid-2">
         <!-- Profile -->
         <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;">
           <p style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px;">👤 Profil Orang Tua</p>
@@ -507,7 +538,7 @@
 </div>
 
 <div id="topupModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(5px); z-index:9000; display:none; align-items:center; justify-content:center;">
-  <div id="topupCard" style="background:linear-gradient(135deg,#1e3060,#162444); border:1px solid rgba(255,214,10,0.2); border-radius:24px; padding:24px; width:320px; box-shadow:0 20px 50px rgba(0,0,0,0.5); transform:scale(0.9); opacity:0; transition:all 0.3s cubic-bezier(.34,1.56,.64,1);">
+  <div id="topupCard" style="background:linear-gradient(135deg,#1e3060,#162444); border:1px solid rgba(255,214,10,0.2); border-radius:24px; padding:24px; width:320px; box-shadow:0 20px 50px rgba(0,0,0,0.5); transform:scale(0.9); opacity:0; transition:all 0.3s cubic-bezier(.34,1.56,.64,1); margin:0 20px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
       <h3 style="font-size:1.1rem; font-weight:800; color:#fff;">Top Up Saldo Master</h3>
       <button onclick="closeTopUp()" style="background:none; border:none; color:rgba(255,255,255,0.4); font-size:1.2rem; cursor:pointer;">✕</button>
@@ -574,6 +605,44 @@ function dismissToast(t){
   setTimeout(()=>t.remove(), 400);
 }
 
+// ===== PREMIUM UNLOCK SIMULATION =====
+function unlockPremium() {
+  showToast('info', '⏳', 'Memproses Pembayaran...', 'Sedang mengaktifkan fitur KOIN Premium kamu.', 2000);
+  
+  setTimeout(() => {
+    // 1. Ilangin efek blur dan kasih akses klik di kartu AI
+    const cards = document.querySelectorAll('#aiCardsContainer .ai-card');
+    cards.forEach(card => {
+      card.style.filter = 'none';
+      card.style.pointerEvents = 'all';
+      card.style.userSelect = 'auto';
+    });
+
+    // 2. Hide upgrade banner sama text gembok
+    const banner = document.getElementById('upgradeBanner');
+    const lockText = document.getElementById('upgradeLockText');
+    if(banner) banner.style.display = 'none';
+    if(lockText) lockText.style.opacity = '0';
+
+    // 3. Ubah Badge 'PRO' di menu samping dan header
+    const sidebarBadge = document.getElementById('aiBadgePro');
+    const titleBadge = document.getElementById('pageTitleBadge');
+    if(sidebarBadge) {
+      sidebarBadge.textContent = 'PREMIUM';
+      sidebarBadge.style.background = 'linear-gradient(135deg, var(--yellow), var(--orange))';
+      sidebarBadge.style.color = '#0F1E3D';
+    }
+    if(titleBadge) {
+      titleBadge.textContent = 'PREMIUM';
+      titleBadge.style.background = 'linear-gradient(135deg, var(--yellow), var(--orange))';
+      titleBadge.style.color = '#0F1E3D';
+    }
+
+    // 4. Notif Sukses
+    showToast('success', '🎉', 'Premium Berhasil Aktif!', 'Selamat menikmati semua laporan mendalam dan insight AI dari KOIN.', 5000);
+  }, 2000);
+}
+
 // ===== SAVE LIMIT =====
 function saveLimit(){
   const input = document.getElementById('limitInput');
@@ -586,8 +655,8 @@ function saveLimit(){
 
 // ===== FILTER TRANSACTIONS =====
 function filterTx(btn, type){
-  document.querySelectorAll('.tx-filter').forEach(b=>{ b.style.background='rgba(255,255,255,0.05)'; b.style.borderColor='var(--border)'; b.style.color='rgba(255,255,255,0.45)'; });
-  btn.style.background='rgba(255,214,10,0.1)'; btn.style.borderColor='rgba(255,214,10,0.2)'; btn.style.color='var(--yellow)';
+  document.querySelectorAll('.tx-filter').forEach(b=>{ b.style.background='rgba(255,255,255,0.05)'; b.style.borderColor='var(--border)'; b.style.color='rgba(255,255,255,0.45)'; b.classList.remove('active-filter'); });
+  btn.style.background='rgba(255,214,10,0.1)'; btn.style.borderColor='rgba(255,214,10,0.2)'; btn.style.color='var(--yellow)'; btn.classList.add('active-filter');
   document.querySelectorAll('.tx-row').forEach(r=>{ r.style.display = (type==='semua'||r.dataset.type===type) ? '' : 'none'; });
 }
 
@@ -604,7 +673,7 @@ function toggleSidebar(){
   const s=document.getElementById('sidebar'); s.classList.toggle('open');
   document.getElementById('mob-overlay').style.display=s.classList.contains('open')?'block':'none';
 }
-function checkW(){ document.getElementById('menuBtn').style.display=window.innerWidth<768?'block':'none'; }
+function checkW(){ document.getElementById('menuBtn').style.display=window.innerWidth<=768?'block':'none'; }
 checkW(); window.addEventListener('resize',checkW);
 
 // ===== TOUR GUIDE =====
@@ -614,7 +683,7 @@ const tourSteps = [
   { targetId:'t-chart',   icon:'📊', title:'Grafik Pengeluaran',          body:'Lihat tren pengeluaran Dafi dalam 7 hari terakhir. Hari Kamis biasanya pengeluaran tertinggi — perhatikan ya!', pos:'below' },
   { targetId:'nav-limit', icon:'⚙️', title:'Atur Limit dengan Mudah',    body:'Klik menu "Atur Limit" di sidebar untuk mengubah limit harian, mingguan, atau jam aktif kapan Dafi boleh bayar.', pos:'right' },
   { targetId:'nav-notif', icon:'🔔', title:'Notifikasi Real-time',        body:'Ada 3 notifikasi belum dibaca! Kamu akan selalu tahu setiap kali Dafi bertransaksi atau limitnya hampir habis.', pos:'right' },
-  { targetId:'nav-ai',    icon:'🤖', title:'AI Insight (Fitur Premium)',  body:'Upgrade ke Premium untuk analisis AI mendalam: pola makan Dafi, prediksi pengeluaran, hingga saran nutrisi otomatis.', pos:'right' },
+  { targetId:'nav-ai',    icon:'🤖', title:'AI Insight (Fitur Premium)',  body:'Masuk ke sini buat lihat simulasi buka kunci fitur berlangganan analisis cerdas dari KOIN.', pos:'right' },
 ];
 let tourIdx = 0;
 let tourActive = false;
@@ -645,6 +714,13 @@ function renderTourStep(){
   // Highlight target
   const target = document.getElementById(step.targetId);
   if(target){
+    // Pastikan mobile sidebar open saat interaksi nav
+    if(window.innerWidth<=768 && step.targetId.startsWith('nav-') && !document.getElementById('sidebar').classList.contains('open')) {
+      toggleSidebar();
+      setTimeout(renderTourStep, 300); // tunggu transisi menu kebuka
+      return;
+    }
+
     const r = target.getBoundingClientRect();
     const pad = 8;
     spotlight.style.left   = (r.left-pad)+'px';
@@ -657,24 +733,26 @@ function renderTourStep(){
     const cw=290, margin=14;
     let cl = r.left-pad;
     let ct = r.top + r.height + pad + margin;
-    if(step.pos==='right') { cl = r.right + margin; ct = r.top - pad; }
+    if(step.pos==='right' && window.innerWidth>768) { cl = r.right + margin; ct = r.top - pad; }
     // Clamp
     cl = Math.max(8, Math.min(cl, window.innerWidth-cw-8));
     ct = Math.max(8, Math.min(ct, window.innerHeight-200));
     card.style.left = cl+'px';
     card.style.top  = ct+'px';
 
-    // Fix arrow for right-positioned
-    card.querySelector('::before');
     setTimeout(()=>card.classList.add('show'), 50);
 
     target.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
 
-  // Activate matching nav page if sidebar step
   if(step.targetId.startsWith('nav-')){
     const pageName = step.targetId.replace('nav-','');
     showPage(pageName);
+    // paksa nampilin sidebar lagi di mobile kalo ke-close gara-gara fungsi showPage
+    if(window.innerWidth<=768) { 
+      document.getElementById('sidebar').classList.add('open'); 
+      document.getElementById('mob-overlay').style.display='block';
+    }
   }
 }
 function tourStep(dir){
@@ -688,18 +766,16 @@ function endTour(){
   tourActive = false;
   document.getElementById('tourOverlay').style.display='none';
   document.getElementById('tourCard').classList.remove('show');
+  if(window.innerWidth<=768 && document.getElementById('sidebar').classList.contains('open')) toggleSidebar();
   showPage('ringkasan');
-  showToast('success','🎉','Tur Selesai!','Kamu sudah mengenal semua fitur KOIN. Selamat memantau keuangan Dafi!');
+  showToast('success','🎉','Tur Selesai!','Kamu sudah mengenal semua fitur KOIN. Coba menu AI Insight untuk upgrade premium!');
 }
+
 function openTopUp() {
   const modal = document.getElementById('topupModal');
   const card = document.getElementById('topupCard');
   modal.style.display = 'flex';
-  // Trigger animasi
-  setTimeout(() => {
-    card.style.transform = 'scale(1)';
-    card.style.opacity = '1';
-  }, 10);
+  setTimeout(() => { card.style.transform = 'scale(1)'; card.style.opacity = '1'; }, 10);
 }
 
 function closeTopUp() {
@@ -717,6 +793,7 @@ function copyVA() {
     showToast('success', '📋', 'Berhasil Disalin!', 'Nomor VA berhasil disalin ke clipboard. Silakan buka aplikasi m-Banking kamu.');
   });
 }
+
 // Auto-start tour on load
 window.addEventListener('load', ()=>{
   setTimeout(()=>{ startTour(); }, 800);
