@@ -12,7 +12,7 @@
     body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145deg,#FF6B35 0%,#FF4D8D 45%,#7B2FBE 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
     .fredoka{font-family:'Fredoka One',cursive;}
 
-    /* PHONE */
+    /* PHONE CONTAINER */
     .phone{width:375px;height:812px;background:var(--bg);border-radius:52px;box-shadow:0 0 0 2px rgba(255,255,255,0.25),0 0 0 11px #1a1a2e,0 0 0 13px rgba(255,255,255,0.08),0 50px 100px rgba(0,0,0,0.55);position:relative;overflow:hidden;display:flex;flex-direction:column;}
     .status-bar{height:44px;background:var(--n);flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;}
     .dyn-island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:20px;z-index:60;}
@@ -20,9 +20,13 @@
     .app-header::after{content:'';position:absolute;bottom:-22px;left:0;right:0;height:44px;background:var(--n);border-radius:0 0 50% 50% / 0 0 44px 44px;}
     .phone-body{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;z-index:1;}
     .phone-body::-webkit-scrollbar{display:none;}
+    
+    /* TABS */
     .tab-page{display:none;padding:32px 18px 100px;animation:fadeUp .22s ease;}
     .tab-page.active{display:block;}
     @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+    
+    /* BOTTOM NAV */
     .bottom-nav{position:absolute;bottom:0;left:0;right:0;height:80px;background:#fff;border-top:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:space-around;padding-bottom:10px;box-shadow:0 -6px 24px rgba(0,0,0,0.07);z-index:30;}
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 12px;border-radius:14px;transition:background .15s;}
     .nav-item:hover{background:rgba(0,0,0,0.04);}
@@ -48,22 +52,7 @@
     /* CAMERA SCANNER */
     #camOverlay{position:absolute;inset:0;background:#000;z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;border-radius:52px;}
     #camOverlay.show{display:flex;}
-
-    /* Fake camera feed */
     .cam-feed{position:absolute;inset:0;border-radius:52px;overflow:hidden;}
-    .cam-pixel{position:absolute;border-radius:2px;animation:camFlicker linear infinite;}
-    @keyframes camFlicker{0%,100%{opacity:.5;}50%{opacity:1;}}
-
-    /* PIN OVERLAY */
-    #pinOverlay { position:absolute; inset:0; background:rgba(15,30,61,0.98); z-index:105; display:none; flex-direction:column; align-items:center; justify-content:center; border-radius:52px; backdrop-filter:blur(10px); }
-    #pinOverlay.show { display:flex; animation:slideUp .3s cubic-bezier(.34,1.56,.64,1); }
-    @keyframes slideUp { from{transform:translateY(100%);} to{transform:translateY(0);} }
-    .pin-dot { width:16px; height:16px; border-radius:50%; background:rgba(255,255,255,0.15); transition:all .2s; }
-    .pin-dot.filled { background:var(--y); transform:scale(1.2); box-shadow:0 0 10px rgba(255,214,10,0.5); }
-    .numpad-btn { width:60px; height:60px; border-radius:50%; background:rgba(255,255,255,0.08); color:#fff; font-size:1.5rem; font-weight:800; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; transition:background .15s, transform .1s; font-family:'Fredoka One', cursive; }
-    .numpad-btn:active { background:rgba(255,255,255,0.2); transform:scale(0.9); }
-
-    /* QR frame */
     .qr-frame{position:relative;width:224px;height:224px;display:flex;align-items:center;justify-content:center;z-index:2;}
     .qrc{position:absolute;width:38px;height:38px;}
     .qrc.tl{top:0;left:0;border-top:4px solid var(--g);border-left:4px solid var(--g);border-radius:6px 0 0 0;}
@@ -72,54 +61,47 @@
     .qrc.br{bottom:0;right:0;border-bottom:4px solid var(--g);border-right:4px solid var(--g);border-radius:0 0 6px 0;}
     .laser{width:194px;height:2px;background:linear-gradient(90deg,transparent,var(--g),transparent);box-shadow:0 0 12px var(--g);animation:laserScan 1.5s ease-in-out infinite;}
     @keyframes laserScan{0%{transform:translateY(-92px);opacity:1;}100%{transform:translateY(92px);opacity:.6;}}
-
-    /* QR code grid (fake QR) */
     .fake-qr{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:10px;background:#fff;border-radius:8px;opacity:0;transition:opacity .4s;position:absolute;}
     .fake-qr.show{opacity:1;}
     .qr-cell{width:18px;height:18px;border-radius:2px;}
-
-    /* Detected flash */
     .detect-flash{position:absolute;inset:0;background:rgba(6,214,160,0.18);border-radius:52px;opacity:0;z-index:3;pointer-events:none;}
     @keyframes flashGreen{0%{opacity:0;}30%{opacity:1;}100%{opacity:0;}}
 
-    /* Payment receipt overlay */
-    #receiptOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:110;display:none;align-items:center;justify-content:center;border-radius:52px;}
-    #receiptOverlay.show{display:flex;}
+    /* PIN OVERLAY */
+    #pinOverlay{position:absolute;inset:0;background:var(--bg);z-index:105;display:none;flex-direction:column;align-items:center;padding-top:120px;border-radius:52px;}
+    #pinOverlay.show{display:flex;animation:slideUp .3s cubic-bezier(.34,1.56,.64,1);}
+    @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+    .pin-dots{display:flex;gap:12px;margin:30px 0 40px;}
+    .pin-dot{width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,0.1);transition:background .2s;}
+    .pin-dot.filled{background:var(--o);box-shadow:0 0 8px rgba(255,107,53,0.5);}
+    .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:75%;margin:0 auto;}
+    .key-btn{width:70px;height:70px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#111;box-shadow:0 4px 12px rgba(0,0,0,0.06);border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .1s;}
+    .key-btn:active{transform:scale(0.9);background:rgba(255,107,53,0.1);}
+    .key-btn.empty{background:transparent;box-shadow:none;pointer-events:none;}
+
+    /* PAYMENT OVERLAYS (Success & Fail) */
+    .receipt-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:110;display:none;align-items:center;justify-content:center;border-radius:52px;}
+    .receipt-overlay.show{display:flex;}
     .receipt-card{background:#fff;border-radius:24px;padding:28px 24px;width:300px;text-align:center;animation:receiptPop .35s cubic-bezier(.34,1.56,.64,1);}
     @keyframes receiptPop{from{transform:scale(.7);opacity:0;}to{transform:scale(1);opacity:1;}}
 
-    /* TOAST (inside phone) */
-    #phoneToast{position:absolute;top:56px;left:14px;right:14px;z-index:200;pointer-events:none;}
-    .p-toast{background:rgba(15,30,61,0.96);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;border-left:4px solid var(--g);box-shadow:0 8px 24px rgba(0,0,0,0.35);transform:translateY(-20px) scale(.95);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:all;}
-    .p-toast.show{transform:translateY(0) scale(1);opacity:1;}
-
-    /* XP bar */
+    /* TOAST & ANIMATIONS */
+    #phoneToastArea{position:sticky;top:0;left:0;right:0;z-index:200;padding:0 12px;pointer-events:none;}
     .xp-track{background:rgba(255,255,255,0.22);border-radius:999px;height:6px;}
     .xp-fill{background:var(--y);height:100%;border-radius:999px;box-shadow:0 0 8px rgba(255,214,10,0.7);transition:width 1s cubic-bezier(.34,1,.64,1);}
-
-    /* Coin pop */
     .coin-pop{position:absolute;pointer-events:none;z-index:210;animation:coinPop .9s ease-out forwards;font-size:1.4rem;}
     @keyframes coinPop{0%{transform:translateY(0) scale(1);opacity:1;}100%{transform:translateY(-90px) scale(.2);opacity:0;}}
 
-    /* Mission card */
+    /* CARDS & ITEMS */
     .mission-card{background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 12px rgba(0,0,0,0.07);margin-bottom:10px;transition:transform .15s;}
     .mission-card:active{transform:scale(.98);}
     .m-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0;}
-
-    /* History item */
-    .hist-item{background:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+    .hist-item{background:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,0.05);animation:fadeUp .3s ease;}
     .h-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-
-    /* Profile stat */
     .prof-stat{background:#fff;border-radius:16px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
-
-    /* Tour inside phone */
-    #phoneToasts{position:absolute;top:60px;left:12px;right:12px;z-index:250;pointer-events:none;display:flex;flex-direction:column;gap:8px;}
-
-    /* Section label */
     .sec-lbl{font-size:0.68rem;font-weight:800;color:rgba(0,0,0,0.28);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;margin-top:4px;}
 
-    /* Tour card (phone) */
+    /* TOUR OVERLAY */
     #phoneTourCard{position:absolute;z-index:300;left:14px;right:14px;background:linear-gradient(135deg,#1e3060,#162444);border:1px solid rgba(255,214,10,0.35);border-radius:20px;padding:16px 18px;box-shadow:0 20px 50px rgba(0,0,0,0.6);transform:scale(.9);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
     #phoneTourCard.show{transform:scale(1);opacity:1;}
     #phoneOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.65);z-index:290;border-radius:52px;display:none;}
@@ -156,22 +138,18 @@
 
   <!-- CAMERA OVERLAY -->
   <div id="camOverlay">
-    <!-- Fake blurry camera background -->
     <div class="cam-feed" id="camFeed"></div>
-    <!-- Dark center vignette -->
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.6) 100%);z-index:1;border-radius:52px;"></div>
     <p style="color:rgba(255,255,255,0.5);font-size:0.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:24px;z-index:2;">KOIN QRIS Scanner</p>
-    <!-- QR frame -->
     <div class="qr-frame" id="qrFrame">
       <div class="qrc tl"></div><div class="qrc tr"></div><div class="qrc bl"></div><div class="qrc br"></div>
-      <!-- fake QR grid (hidden initially) -->
       <div class="fake-qr" id="fakeQr" style="z-index:2;"></div>
       <div class="laser" id="scanLaser"></div>
       <div class="detect-flash" id="detectFlash"></div>
     </div>
     <p id="camText" style="color:#fff;font-size:0.95rem;font-weight:800;margin-top:22px;font-family:'Fredoka One',cursive;z-index:2;letter-spacing:.04em;">Membuka Kamera...</p>
     <p id="camSub"  style="color:rgba(255,255,255,0.4);font-size:0.68rem;margin-top:5px;z-index:2;font-weight:600;">Mendeteksi kode QRIS</p>
-    <!-- merchant info (shows when detected) -->
+    
     <div id="merchantInfo" style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:12px 20px;margin-top:16px;text-align:center;z-index:2;opacity:0;transition:opacity .4s;min-width:220px;">
       <p style="color:rgba(255,255,255,0.55);font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">Merchant Terdeteksi</p>
       <p style="color:#fff;font-size:0.95rem;font-weight:800;margin-top:4px;">🍱 Kantin Bu Yati</p>
@@ -180,37 +158,39 @@
     <button id="cancelScanBtn" onclick="cancelScan()" style="margin-top:18px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.65);border-radius:12px;padding:9px 22px;cursor:pointer;font-size:0.75rem;font-weight:700;font-family:inherit;z-index:2;">✕ Batalkan</button>
   </div>
 
-  <!-- Payment Receipt Overlay -->
-  <div id="receiptOverlay">
-    <div id="pinOverlay">
-    <div style="background:rgba(255,214,10,0.15); width:50px; height:50px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin-bottom:16px;">🔒</div>
-    <p class="fredoka" style="color:#fff; font-size:1.4rem; margin-bottom:6px;">Masukkan PIN</p>
-    <p style="color:rgba(255,255,255,0.5); font-size:0.75rem; margin-bottom:32px;">Kantin Bu Yati • Rp10.000</p>
+  <!-- PIN OVERLAY -->
+  <div id="pinOverlay">
+    <div style="width:60px;height:60px;background:#fff;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:16px;">🔐</div>
+    <p class="fredoka" style="font-size:1.3rem; color:#111;">Masukkan PIN</p>
+    <p style="font-size:0.75rem; color:rgba(0,0,0,0.45); margin-top:5px;">Keamanan ekstra buat bayar jajanan</p>
     
-    <div style="display:flex; gap:16px; margin-bottom:40px;" id="pinDots">
+    <div class="pin-dots" id="pinDots">
       <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
       <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+    </div>
+    
+    <p id="pinLoading" style="color:var(--o); font-size:0.75rem; font-weight:700; opacity:0; margin-top:-20px; margin-bottom:20px;">Memverifikasi...</p>
+
+    <div class="keypad">
+      <button class="key-btn" onclick="typePin(1)">1</button>
+      <button class="key-btn" onclick="typePin(2)">2</button>
+      <button class="key-btn" onclick="typePin(3)">3</button>
+      <button class="key-btn" onclick="typePin(4)">4</button>
+      <button class="key-btn" onclick="typePin(5)">5</button>
+      <button class="key-btn" onclick="typePin(6)">6</button>
+      <button class="key-btn" onclick="typePin(7)">7</button>
+      <button class="key-btn" onclick="typePin(8)">8</button>
+      <button class="key-btn" onclick="typePin(9)">9</button>
+      <div class="key-btn empty"></div>
+      <button class="key-btn" onclick="typePin(0)">0</button>
+      <button class="key-btn" onclick="delPin()" style="background:transparent;box-shadow:none;font-size:1.3rem;">⌫</button>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:30px;">
-      <button class="numpad-btn" onclick="pressPin('1')">1</button>
-      <button class="numpad-btn" onclick="pressPin('2')">2</button>
-      <button class="numpad-btn" onclick="pressPin('3')">3</button>
-      <button class="numpad-btn" onclick="pressPin('4')">4</button>
-      <button class="numpad-btn" onclick="pressPin('5')">5</button>
-      <button class="numpad-btn" onclick="pressPin('6')">6</button>
-      <button class="numpad-btn" onclick="pressPin('7')">7</button>
-      <button class="numpad-btn" onclick="pressPin('8')">8</button>
-      <button class="numpad-btn" onclick="pressPin('9')">9</button>
-      <div></div>
-      <button class="numpad-btn" onclick="pressPin('0')">0</button>
-      <button class="numpad-btn" onclick="delPin()" style="font-size:1.2rem; background:none;">⌫</button>
-    </div>
-    
-    <button onclick="cancelPin()" style="background:none; border:none; color:rgba(255,255,255,0.4); font-size:0.8rem; font-weight:700; font-family:inherit; cursor:pointer;">Batalkan Transaksi</button>
+    <button onclick="cancelPin()" style="margin-top:30px;background:none;border:none;color:rgba(0,0,0,0.4);font-weight:800;font-size:0.8rem;cursor:pointer;">Batalkan Transaksi</button>
   </div>
 
-  <div id="receiptOverlay">
+  <!-- Payment Receipt Overlay (SUCCESS) -->
+  <div id="receiptOverlay" class="receipt-overlay">
     <div class="receipt-card">
       <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--g),#22d3ee);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 14px;">✅</div>
       <p class="fredoka" style="color:#111;font-size:1.3rem;margin-bottom:4px;">Pembayaran Sukses!</p>
@@ -220,19 +200,21 @@
         <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">Sisa Limit</span><span id="recSisa" style="font-size:0.78rem;font-weight:800;color:#111;">Rp10.000</span></div>
         <div style="display:flex;justify-content:space-between;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">XP Diperoleh</span><span style="font-size:0.78rem;font-weight:800;color:var(--o);">+5 XP ⭐</span></div>
       </div>
-      <button onclick="closeReceipt()" style="width:100%;background:linear-gradient(135deg,var(--o),var(--p));border:none;color:#fff;font-weight:800;font-size:0.88rem;padding:12px;border-radius:13px;cursor:pointer;font-family:inherit;">Oke, Makasih! 👍</button>
+      <button onclick="closeReceipt('success')" style="width:100%;background:linear-gradient(135deg,var(--o),var(--p));border:none;color:#fff;font-weight:800;font-size:0.88rem;padding:12px;border-radius:13px;cursor:pointer;font-family:inherit;">Oke, Makasih! 👍</button>
     </div>
   </div>
+
+  <!-- Payment Receipt Overlay (FAILED - INSUFFICIENT BALANCE) -->
+  <div id="receiptFailOverlay" class="receipt-overlay">
     <div class="receipt-card">
-      <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--g),#22d3ee);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 14px;">✅</div>
-      <p class="fredoka" style="color:#111;font-size:1.3rem;margin-bottom:4px;">Pembayaran Sukses!</p>
-      <p style="color:rgba(0,0,0,0.4);font-size:0.75rem;margin-bottom:18px;">via QRIS · Kantin Bu Yati</p>
-      <div style="background:#f9fafb;border-radius:14px;padding:14px;margin-bottom:16px;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">Jumlah Bayar</span><span style="font-size:0.78rem;font-weight:800;color:#ef4444;">−Rp10.000</span></div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">Sisa Limit</span><span id="recSisa" style="font-size:0.78rem;font-weight:800;color:#111;">Rp10.000</span></div>
-        <div style="display:flex;justify-content:space-between;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">XP Diperoleh</span><span style="font-size:0.78rem;font-weight:800;color:var(--o);">+5 XP ⭐</span></div>
+      <div style="width:60px;height:60px;background:linear-gradient(135deg,#ff4d4d,#ef4444);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 14px;">❌</div>
+      <p class="fredoka" style="color:#111;font-size:1.3rem;margin-bottom:4px;">Pembayaran Gagal</p>
+      <p style="color:rgba(0,0,0,0.4);font-size:0.75rem;margin-bottom:18px;">Saldo limit jajan kamu tidak cukup!</p>
+      <div style="background:#fef2f2;border-radius:14px;padding:14px;margin-bottom:16px;border:1px dashed #fca5a5;">
+        <p style="font-size:0.78rem;color:#ef4444;font-weight:800;margin-bottom:4px;">Butuh: Rp10.000</p>
+        <p style="font-size:0.78rem;color:rgba(0,0,0,0.5);font-weight:600;">Sisa Limit: <span id="failSisa">Rp0</span></p>
       </div>
-      <button onclick="closeReceipt()" style="width:100%;background:linear-gradient(135deg,var(--o),var(--p));border:none;color:#fff;font-weight:800;font-size:0.88rem;padding:12px;border-radius:13px;cursor:pointer;font-family:inherit;">Oke, Makasih! 👍</button>
+      <button onclick="closeReceipt('fail')" style="width:100%;background:#ef4444;border:none;color:#fff;font-weight:800;font-size:0.88rem;padding:12px;border-radius:13px;cursor:pointer;font-family:inherit;">Yah, Oke deh 😔</button>
     </div>
   </div>
 
@@ -253,7 +235,7 @@
         <span class="fredoka" style="color:var(--y);font-size:1.35rem;">KOIN</span>
       </div>
       <div style="display:flex;align-items:center;gap:7px;">
-        <div id="phoneNotifBtn" style="background:rgba(255,255,255,0.1);border-radius:10px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;position:relative;" onclick="showPhoneToast('🔔','Notifikasi','Limit hampir habis! Sisa Rp5.000','warn')">
+        <div id="phoneNotifBtn" style="background:rgba(255,255,255,0.1);border-radius:10px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;position:relative;" onclick="showPhoneToast('🔔','Notifikasi','Limit tinggal setengah! Pakai yang bijak ya.','warn')">
           🔔
           <span style="position:absolute;top:-3px;right:-3px;background:var(--p);color:#fff;font-size:.48rem;padding:2px 4px;border-radius:999px;font-weight:800;">1</span>
         </div>
@@ -274,12 +256,10 @@
   <div class="phone-body">
 
     <!-- PHONE TOAST -->
-    <div id="phoneToastArea" style="position:sticky;top:0;left:0;right:0;z-index:200;padding:0 12px;pointer-events:none;"></div>
+    <div id="phoneToastArea"></div>
 
     <!-- ===== TAB: BERANDA ===== -->
     <div id="tab-beranda" class="tab-page active">
-
-      <!-- Balance card -->
       <div class="bal-card" id="balCard">
         <p style="color:rgba(255,255,255,.68);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;position:relative;z-index:2;">💰 Sisa Limit Jajan Hari Ini</p>
         <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:10px;position:relative;z-index:2;">
@@ -306,18 +286,17 @@
             <span class="fredoka" style="color:#fff;font-size:.9rem;line-height:1;">QRIS</span>
           </button>
         </div>
-        <p style="color:rgba(0,0,0,.22);font-size:.62rem;font-weight:600;margin-top:8px;">Kantin · Koperasi · Warung</p>
+        <p style="color:rgba(0,0,0,.22);font-size:.62rem;font-weight:600;margin-top:8px;">Kantin · Koperasi · Toko Buku</p>
       </div>
 
       <!-- Quick actions -->
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px;">
-        <div onclick="switchTab('misi')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s;" onmousedown="this.style.transform='scale(.95)'" onmouseup="this.style.transform=''"><span style="font-size:1.3rem;">🗺️</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Misi</span></div>
-        <div onclick="switchTab('tabungan')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s;" onmousedown="this.style.transform='scale(.95)'" onmouseup="this.style.transform=''"><span style="font-size:1.3rem;">🐷</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Nabung</span></div>
-        <div onclick="switchTab('riwayat')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s;" onmousedown="this.style.transform='scale(.95)'" onmouseup="this.style.transform=''"><span style="font-size:1.3rem;">📋</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Riwayat</span></div>
-        <div onclick="switchTab('profil')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s;" onmousedown="this.style.transform='scale(.95)'" onmouseup="this.style.transform=''"><span style="font-size:1.3rem;">👤</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Profil</span></div>
+        <div onclick="switchTab('misi')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;"><span style="font-size:1.3rem;">🗺️</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Misi</span></div>
+        <div onclick="switchTab('tabungan')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;"><span style="font-size:1.3rem;">🐷</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Nabung</span></div>
+        <div onclick="switchTab('riwayat')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;"><span style="font-size:1.3rem;">📋</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Riwayat</span></div>
+        <div onclick="switchTab('profil')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;"><span style="font-size:1.3rem;">👤</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Profil</span></div>
       </div>
 
-      <!-- Active missions preview -->
       <p class="sec-lbl">🎮 Misi Aktif</p>
       <div class="mission-card" onclick="switchTab('misi')">
         <div class="m-icon" style="background:#dcfce7;">🥗</div>
@@ -326,150 +305,161 @@
           <div style="background:#f0fdf4;border-radius:999px;height:5px;margin-top:5px;overflow:hidden;"><div style="width:66%;height:100%;background:var(--g);border-radius:999px;"></div></div>
           <p style="font-size:.6rem;color:rgba(0,0,0,.32);margin-top:2px;font-weight:600;">2/3 · Hampir selesai!</p>
         </div>
-        <div style="background:#f0fdf4;border-radius:9px;padding:4px 7px;text-align:center;"><p style="font-size:.58rem;font-weight:800;color:var(--g);">+20XP</p></div>
-      </div>
-      <div class="mission-card">
-        <div class="m-icon" style="background:#fef9c3;">🐷</div>
-        <div style="flex:1;min-width:0;">
-          <p style="font-size:.78rem;font-weight:800;color:#111;">Nabung Rp5.000 hari ini</p>
-          <div style="background:#fefce8;border-radius:999px;height:5px;margin-top:5px;overflow:hidden;"><div style="width:0%;height:100%;background:var(--y);border-radius:999px;"></div></div>
-          <p style="font-size:.6rem;color:rgba(0,0,0,.32);margin-top:2px;font-weight:600;">Belum dimulai</p>
-        </div>
-        <div style="background:#fefce8;border-radius:9px;padding:4px 7px;"><p style="font-size:.58rem;font-weight:800;color:#ca8a04;">+15XP</p></div>
+        <div style="background:#f0fdf4;border-radius:9px;padding:4px 7px;"><p style="font-size:.58rem;font-weight:800;color:var(--g);">+20XP</p></div>
       </div>
 
-      <!-- Recent tx -->
-      <p class="sec-lbl" style="margin-top:14px;">🧾 Terbaru</p>
-      <div class="hist-item"><div class="h-icon" style="background:#fff7ed;">🍱</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Kantin Bu Yati</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">08:35 · QRIS</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp10.000</span></div>
-      <div class="hist-item"><div class="h-icon" style="background:#f0fdf4;">🥛</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Beli Susu</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">10:12 · QRIS</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp5.000</span></div>
+      <p class="sec-lbl" style="margin-top:14px;">🧾 Transaksi Cepat</p>
+      <!-- Wadah transaksi baru (ditambah dinamis) -->
+      <div id="homeRecentHist"></div>
+      
+      <div class="hist-item" onclick="switchTab('riwayat')"><div class="h-icon" style="background:#eff6ff;">🧃</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Koperasi Sekolah</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">Kemarin · Minuman</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp4.000</span></div>
     </div>
 
     <!-- ===== TAB: RIWAYAT ===== -->
     <div id="tab-riwayat" class="tab-page">
-      <p style="font-size:1rem;font-weight:800;color:#111;margin-bottom:4px;">Riwayat Transaksi 📋</p>
-      <p style="font-size:.72rem;color:rgba(0,0,0,.35);margin-bottom:16px;">Semua pengeluaran & pemasukan</p>
-      <!-- Filter pills -->
+      <p style="font-size:1.1rem;font-weight:800;color:#111;margin-bottom:4px;">Riwayat Transaksi 📋</p>
+      <p style="font-size:.72rem;color:rgba(0,0,0,.4);margin-bottom:16px;">Semua laporan jajan dan pemasukan kamu ada di sini.</p>
+      
       <div style="display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;">
-        <span onclick="filterHist(this,'semua')" class="hist-fil" style="background:var(--o);color:#fff;border-radius:99px;padding:5px 14px;font-size:.68rem;font-weight:800;white-space:nowrap;cursor:pointer;">Semua</span>
-        <span onclick="filterHist(this,'keluar')" class="hist-fil" style="background:#fff;color:rgba(0,0,0,.45);border-radius:99px;padding:5px 14px;font-size:.68rem;font-weight:800;white-space:nowrap;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.07);">Keluar</span>
-        <span onclick="filterHist(this,'masuk')" class="hist-fil" style="background:#fff;color:rgba(0,0,0,.45);border-radius:99px;padding:5px 14px;font-size:.68rem;font-weight:800;white-space:nowrap;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.07);">Masuk</span>
+        <span onclick="filterHist(this,'semua')" class="hist-fil" style="background:var(--o);color:#fff;border-radius:99px;padding:5px 14px;font-size:.68rem;font-weight:800;cursor:pointer;">Semua</span>
+        <span onclick="filterHist(this,'keluar')" class="hist-fil" style="background:#fff;color:rgba(0,0,0,.45);border-radius:99px;padding:5px 14px;font-size:.68rem;font-weight:800;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.07);">Keluar</span>
+        <span onclick="filterHist(this,'masuk')" class="hist-fil" style="background:#fff;color:rgba(0,0,0,.45);border-radius:99px;padding:5px 14px;font-size:.68rem;font-weight:800;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.07);">Masuk</span>
       </div>
       <div id="histList">
-        <p style="font-size:.62rem;font-weight:800;color:rgba(0,0,0,.25);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Hari Ini</p>
-        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#fff7ed;">🍱</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Kantin Bu Yati</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">08:35 · QRIS · SDN 01</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp10.000</span></div>
-        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#f0fdf4;">🥛</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Beli Susu</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">10:12 · QRIS · Koperasi</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp5.000</span></div>
-        <div class="hist-item" data-t="masuk"><div class="h-icon" style="background:#f5f3ff;">💵</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Top Up dari Ayah</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">07:00 · Transfer</p></div><span style="font-size:.78rem;font-weight:800;color:var(--g);">+Rp20.000</span></div>
-        <p style="font-size:.62rem;font-weight:800;color:rgba(0,0,0,.25);text-transform:uppercase;letter-spacing:.08em;margin:12px 0 8px;">Kemarin</p>
-        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#fff7ed;">🍜</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Mie Ayam Bu Ningsih</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">11:20 · QRIS</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp8.000</span></div>
-        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#eff6ff;">🧃</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Jus Alpukat</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">09:45 · QRIS</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp6.000</span></div>
-        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#fdf4ff;">🍭</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Permen & Snack</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">14:05 · QRIS</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp4.000</span></div>
+        <p id="histTodayLbl" style="font-size:.62rem;font-weight:800;color:rgba(0,0,0,.25);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Hari Ini</p>
+        
+        <!-- Dinamis Item akan masuk ke sini (setelah label Hari Ini) -->
+
+        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#f0fdf4;">🥛</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Koperasi Sekolah</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">10:12 · Susu Kotak</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp5.000</span></div>
+        <div class="hist-item" data-t="masuk"><div class="h-icon" style="background:#f5f3ff;">💵</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Top Up Uang Jajan</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">07:00 · Dari Ayah</p></div><span style="font-size:.78rem;font-weight:800;color:var(--g);">+Rp20.000</span></div>
+        
+        <p style="font-size:.62rem;font-weight:800;color:rgba(0,0,0,.25);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px;">Kemarin</p>
+        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#fff7ed;">🍜</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Mie Ayam Bu Ningsih</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">11:20 · Makan Siang</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp8.000</span></div>
+        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#eff6ff;">🧃</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Toko Abadi</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">09:45 · Jus Alpukat</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp6.000</span></div>
+        <div class="hist-item" data-t="masuk"><div class="h-icon" style="background:#f5f3ff;">💵</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Sisa Uang Tabungan</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">08:00 · Otomatis</p></div><span style="font-size:.78rem;font-weight:800;color:var(--g);">+Rp2.000</span></div>
+
+        <p style="font-size:.62rem;font-weight:800;color:rgba(0,0,0,.25);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px;">22 Juni 2025</p>
+        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#fdf4ff;">🍭</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Permen & Snack</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">14:05 · Warung Sebelah</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp4.000</span></div>
+        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#fefce8;">📚</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Buku Tulis</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">10:00 · Fotokopi Tiga</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp5.000</span></div>
       </div>
     </div>
 
     <!-- ===== TAB: MISI ===== -->
     <div id="tab-misi" class="tab-page">
-      <p style="font-size:1rem;font-weight:800;color:#111;margin-bottom:4px;">Misi & Tantangan 🗺️</p>
-      <p style="font-size:.72rem;color:rgba(0,0,0,.35);margin-bottom:4px;">Selesaikan misi, kumpulkan XP, tukar hadiah!</p>
-      <!-- XP progress bar -->
-      <div style="background:linear-gradient(135deg,var(--o),var(--p));border-radius:18px;padding:14px 16px;margin-bottom:16px;">
+      <p style="font-size:1.1rem;font-weight:800;color:#111;margin-bottom:4px;">Misi & Tantangan 🗺️</p>
+      <p style="font-size:.72rem;color:rgba(0,0,0,.4);margin-bottom:16px;">Selesaikan misi buat dapet XP dan naik level!</p>
+      
+      <div style="background:linear-gradient(135deg,var(--o),var(--p));border-radius:18px;padding:14px 16px;margin-bottom:20px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span style="color:#fff;font-size:.75rem;font-weight:800;">Level 3 · Penabung Pemula</span><span class="fredoka" style="color:var(--y);font-size:1rem;">85/150 XP</span></div>
         <div style="background:rgba(255,255,255,.22);border-radius:999px;height:8px;overflow:hidden;"><div style="width:57%;height:100%;background:#fff;border-radius:999px;box-shadow:0 0 8px rgba(255,255,255,.5);"></div></div>
         <p style="color:rgba(255,255,255,.55);font-size:.6rem;margin-top:5px;font-weight:600;">65 XP lagi untuk naik Level 4 "Pejuang Hemat" 🎯</p>
       </div>
 
-      <p class="sec-lbl">⚡ Misi Aktif</p>
+      <p class="sec-lbl">⚡ Misi Hari Ini</p>
       <div class="mission-card">
         <div class="m-icon" style="background:#dcfce7;">🥗</div>
         <div style="flex:1;min-width:0;">
-          <p style="font-size:.78rem;font-weight:800;color:#111;">Beli makanan sehat 3x</p>
-          <p style="font-size:.62rem;color:rgba(0,0,0,.35);margin-top:1px;">Pilih lauk bergizi di kantin sekolah</p>
+          <p style="font-size:.78rem;font-weight:800;color:#111;">Jajan Makanan Sehat</p>
+          <p style="font-size:.62rem;color:rgba(0,0,0,.35);margin-top:1px;">Beli lauk bergizi di kantin sekolah</p>
           <div style="background:#f0fdf4;border-radius:999px;height:5px;margin-top:6px;overflow:hidden;"><div style="width:66%;height:100%;background:var(--g);border-radius:999px;"></div></div>
           <p style="font-size:.6rem;color:rgba(0,0,0,.3);margin-top:2px;font-weight:600;">2 dari 3 selesai</p>
         </div>
-        <div style="text-align:center;"><div style="background:#f0fdf4;border-radius:10px;padding:5px 8px;"><p style="font-size:.62rem;font-weight:800;color:var(--g);">+20XP</p></div></div>
+        <div><div style="background:#f0fdf4;border-radius:10px;padding:5px 8px;"><p style="font-size:.62rem;font-weight:800;color:var(--g);">+20XP</p></div></div>
       </div>
       <div class="mission-card">
-        <div class="m-icon" style="background:#fef9c3;">🐷</div>
+        <div class="m-icon" style="background:#fefce8;">🐷</div>
         <div style="flex:1;min-width:0;">
-          <p style="font-size:.78rem;font-weight:800;color:#111;">Nabung Rp5.000 hari ini</p>
-          <p style="font-size:.62rem;color:rgba(0,0,0,.35);margin-top:1px;">Sisihkan sebagian uang jajan ke tabungan</p>
+          <p style="font-size:.78rem;font-weight:800;color:#111;">Nabung Rp5.000</p>
+          <p style="font-size:.62rem;color:rgba(0,0,0,.35);margin-top:1px;">Sisihkan uang jajan ke tabungan</p>
           <div style="background:#fefce8;border-radius:999px;height:5px;margin-top:6px;overflow:hidden;"><div style="width:0%;height:100%;background:var(--y);border-radius:999px;"></div></div>
           <p style="font-size:.6rem;color:rgba(0,0,0,.3);margin-top:2px;font-weight:600;">Belum dimulai</p>
         </div>
         <div><div style="background:#fefce8;border-radius:10px;padding:5px 8px;"><p style="font-size:.62rem;font-weight:800;color:#ca8a04;">+15XP</p></div></div>
       </div>
       <div class="mission-card">
-        <div class="m-icon" style="background:#eff6ff;">⚡</div>
+        <div class="m-icon" style="background:#eff6ff;">💪</div>
         <div style="flex:1;min-width:0;">
-          <p style="font-size:.78rem;font-weight:800;color:#111;">Jajan di bawah Rp15.000 hari ini</p>
-          <p style="font-size:.62rem;color:rgba(0,0,0,.35);margin-top:1px;">Hemat itu keren!</p>
-          <div style="background:#eff6ff;border-radius:999px;height:5px;margin-top:6px;overflow:hidden;"><div style="width:80%;height:100%;background:#60a5fa;border-radius:999px;"></div></div>
-          <p style="font-size:.6rem;color:rgba(0,0,0,.3);margin-top:2px;font-weight:600;">Rp12.000 dari Rp15.000</p>
+          <p style="font-size:.78rem;font-weight:800;color:#111;">Bantu Orang Tua</p>
+          <p style="font-size:.62rem;color:rgba(0,0,0,.35);margin-top:1px;">Sapu halaman sore hari</p>
+          <div style="background:#eff6ff;border-radius:999px;height:5px;margin-top:6px;overflow:hidden;"><div style="width:0%;height:100%;background:#3b82f6;border-radius:999px;"></div></div>
+          <p style="font-size:.6rem;color:rgba(0,0,0,.3);margin-top:2px;font-weight:600;">Minta ACC Ayah/Ibu</p>
         </div>
-        <div><div style="background:#eff6ff;border-radius:10px;padding:5px 8px;"><p style="font-size:.62rem;font-weight:800;color:#2563eb;">+25XP</p></div></div>
+        <div><div style="background:#eff6ff;border-radius:10px;padding:5px 8px;"><p style="font-size:.62rem;font-weight:800;color:#2563eb;">+30XP</p></div></div>
       </div>
 
-      <p class="sec-lbl" style="margin-top:14px;">🏆 Misi Selesai</p>
+      <p class="sec-lbl" style="margin-top:18px;">🏆 Misi Selesai (Bulan Ini)</p>
       <div class="mission-card" style="opacity:.6;">
         <div class="m-icon" style="background:#f0fdf4;"><span style="font-size:1.3rem;">✅</span></div>
-        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Bayar QRIS pertama kali</p><p style="font-size:.62rem;color:rgba(0,0,0,.32);margin-top:1px;">Diselesaikan 20 Jun 2025</p></div>
+        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Bayar QRIS pertama kali</p><p style="font-size:.62rem;color:rgba(0,0,0,.32);margin-top:1px;">Tuntas kemaren</p></div>
         <span class="fredoka" style="color:var(--g);font-size:.88rem;">+10XP</span>
       </div>
       <div class="mission-card" style="opacity:.6;">
-        <div class="m-icon" style="background:#fefce8;"><span style="font-size:1.3rem;">✅</span></div>
-        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Login 7 hari berturut-turut</p><p style="font-size:.62rem;color:rgba(0,0,0,.32);margin-top:1px;">Diselesaikan 22 Jun 2025</p></div>
-        <span class="fredoka" style="color:var(--y);font-size:.88rem;">+20XP</span>
+        <div class="m-icon" style="background:#f0fdf4;"><span style="font-size:1.3rem;">✅</span></div>
+        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Buka Tabungan Impian</p><p style="font-size:.62rem;color:rgba(0,0,0,.32);margin-top:1px;">Selesai 22 Jun</p></div>
+        <span class="fredoka" style="color:var(--g);font-size:.88rem;">+15XP</span>
       </div>
     </div>
 
     <!-- ===== TAB: TABUNGAN ===== -->
     <div id="tab-tabungan" class="tab-page">
-      <p style="font-size:1rem;font-weight:800;color:#111;margin-bottom:4px;">Celengan Digital 🐷</p>
-      <p style="font-size:.72rem;color:rgba(0,0,0,.35);margin-bottom:16px;">Kumpulkan uang untuk impianmu!</p>
-      <div style="background:linear-gradient(140deg,#7B2FBE,#2d4a9b);border-radius:22px;padding:20px;margin-bottom:16px;text-align:center;">
-        <p style="color:rgba(255,255,255,.55);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Total Tabungan</p>
+      <p style="font-size:1.1rem;font-weight:800;color:#111;margin-bottom:4px;">Celengan Digital 🐷</p>
+      <p style="font-size:.72rem;color:rgba(0,0,0,.4);margin-bottom:16px;">Ayo kumpulkan uang buat beli impianmu!</p>
+      
+      <div style="background:linear-gradient(140deg,#7B2FBE,#2d4a9b);border-radius:22px;padding:24px;margin-bottom:20px;text-align:center;">
+        <p style="color:rgba(255,255,255,.6);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Total Tabungan</p>
         <p class="fredoka" style="color:var(--y);font-size:2.8rem;line-height:1;">Rp45.000</p>
-        <p style="color:rgba(255,255,255,.4);font-size:.65rem;margin-top:5px;">dari target Rp100.000 🎯</p>
-        <div style="background:rgba(255,255,255,.18);border-radius:999px;height:8px;overflow:hidden;margin-top:10px;"><div style="width:45%;height:100%;background:var(--y);border-radius:999px;"></div></div>
-        <button onclick="showPhoneToast('🐷','Nabung!','Kamu berhasil nabung Rp5.000! Terus semangat! 🎉','success')" style="margin-top:14px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:13px;padding:10px 20px;cursor:pointer;font-size:.78rem;font-weight:800;font-family:inherit;">+ Nabung Sekarang</button>
+        <p style="color:rgba(255,255,255,.5);font-size:.65rem;margin-top:8px;">Terus nabung, kamu pasti bisa! 🎯</p>
+        
+        <button onclick="showPhoneToast('🐷','Berhasil Nabung!','Hore! Kamu baru aja niat nabung hehe.','success')" style="margin-top:18px;background:var(--y);border:none;color:#0F1E3D;border-radius:14px;padding:12px 24px;cursor:pointer;font-size:.8rem;font-weight:800;font-family:inherit;box-shadow:0 4px 14px rgba(255,214,10,0.3);">+ Tambah Tabungan</button>
       </div>
-      <p class="sec-lbl">🎯 Target Impian</p>
+
+      <p class="sec-lbl">🎯 Target Impian Kamu</p>
       <div class="mission-card">
         <div class="m-icon" style="background:#fef9c3;">🎮</div>
-        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Nintendo Switch Lite</p><div style="background:#fefce8;border-radius:999px;height:5px;margin-top:5px;overflow:hidden;"><div style="width:15%;height:100%;background:var(--y);border-radius:999px;"></div></div><p style="font-size:.6rem;color:rgba(0,0,0,.32);margin-top:2px;font-weight:600;">Rp45.000 dari Rp300.000</p></div>
+        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Beli Game Baru</p><div style="background:#fefce8;border-radius:999px;height:5px;margin-top:5px;overflow:hidden;"><div style="width:15%;height:100%;background:var(--y);border-radius:999px;"></div></div><p style="font-size:.6rem;color:rgba(0,0,0,.32);margin-top:2px;font-weight:600;">Rp45.000 dari Rp300.000</p></div>
       </div>
       <div class="mission-card">
         <div class="m-icon" style="background:#eff6ff;">📚</div>
         <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Buku Komik Doraemon Set</p><div style="background:#eff6ff;border-radius:999px;height:5px;margin-top:5px;overflow:hidden;"><div style="width:60%;height:100%;background:#60a5fa;border-radius:999px;"></div></div><p style="font-size:.6rem;color:rgba(0,0,0,.32);margin-top:2px;font-weight:600;">Rp30.000 dari Rp50.000</p></div>
       </div>
+      <div class="mission-card">
+        <div class="m-icon" style="background:#fdf4ff;">🚲</div>
+        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Sepeda Lipat</p><div style="background:#fdf4ff;border-radius:999px;height:5px;margin-top:5px;overflow:hidden;"><div style="width:5%;height:100%;background:#e879f9;border-radius:999px;"></div></div><p style="font-size:.6rem;color:rgba(0,0,0,.32);margin-top:2px;font-weight:600;">Rp45.000 dari Rp1.500.000</p></div>
+      </div>
     </div>
 
     <!-- ===== TAB: PROFIL ===== -->
     <div id="tab-profil" class="tab-page">
-      <!-- Profile header -->
       <div style="text-align:center;margin-bottom:20px;">
-        <div style="background:linear-gradient(135deg,var(--o),var(--p));border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 10px;box-shadow:0 8px 24px rgba(255,107,53,0.4);">🎒</div>
-        <p style="font-size:1.05rem;font-weight:800;color:#111;">Dafi Pratama</p>
-        <p style="font-size:.72rem;color:rgba(0,0,0,.38);margin-top:2px;">Kelas 5A · SDN 01 Pasuruan</p>
-        <div style="display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,var(--o),var(--p));border-radius:99px;padding:4px 14px;margin-top:8px;">
-          <span style="font-size:.7rem;">⭐</span><span class="fredoka" style="color:#fff;font-size:.82rem;">Level 3 · Penabung Pemula</span>
+        <div style="background:linear-gradient(135deg,var(--o),var(--p));border-radius:50%;width:78px;height:78px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 12px;box-shadow:0 8px 24px rgba(255,107,53,0.4);">🎒</div>
+        <p style="font-size:1.1rem;font-weight:800;color:#111;">Dafi Pratama</p>
+        <p style="font-size:.75rem;color:rgba(0,0,0,.4);margin-top:4px;">Kelas 5A · SDN 01 Pasuruan</p>
+        <div style="display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,var(--o),var(--p));border-radius:99px;padding:6px 16px;margin-top:12px;">
+          <span style="font-size:.8rem;">⭐</span><span class="fredoka" style="color:#fff;font-size:.85rem;">Level 3 · Penabung Pemula</span>
         </div>
       </div>
-      <!-- Stats grid -->
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;">
-        <div class="prof-stat"><p class="fredoka" style="color:var(--o);font-size:1.3rem;">12</p><p style="font-size:.6rem;color:rgba(0,0,0,.38);font-weight:700;margin-top:1px;">Streak 🔥</p></div>
-        <div class="prof-stat"><p class="fredoka" style="color:var(--purple);font-size:1.3rem;">85</p><p style="font-size:.6rem;color:rgba(0,0,0,.38);font-weight:700;margin-top:1px;">Total XP ⭐</p></div>
-        <div class="prof-stat"><p class="fredoka" style="color:var(--g);font-size:1.3rem;">24</p><p style="font-size:.6rem;color:rgba(0,0,0,.38);font-weight:700;margin-top:1px;">Transaksi 💳</p></div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;">
+        <div class="prof-stat"><p class="fredoka" style="color:var(--o);font-size:1.4rem;">12</p><p style="font-size:.6rem;color:rgba(0,0,0,.4);font-weight:700;margin-top:2px;">Streak 🔥</p></div>
+        <div class="prof-stat"><p class="fredoka" style="color:var(--purple);font-size:1.4rem;">85</p><p style="font-size:.6rem;color:rgba(0,0,0,.4);font-weight:700;margin-top:2px;">Total XP ⭐</p></div>
+        <div class="prof-stat"><p class="fredoka" style="color:var(--g);font-size:1.4rem;" id="trxTotal">24</p><p style="font-size:.6rem;color:rgba(0,0,0,.4);font-weight:700;margin-top:2px;">Transaksi 💳</p></div>
       </div>
-      <!-- Badges -->
-      <p class="sec-lbl">🏅 Koleksi Lencana</p>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;">
-        <div style="background:#fff;border-radius:14px;padding:10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);"><div style="font-size:1.5rem;margin-bottom:3px;">🌟</div><p style="font-size:.58rem;font-weight:800;color:rgba(0,0,0,.5);">Pemula</p></div>
-        <div style="background:#fff;border-radius:14px;padding:10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);"><div style="font-size:1.5rem;margin-bottom:3px;">📱</div><p style="font-size:.58rem;font-weight:800;color:rgba(0,0,0,.5);">QRIS Pro</p></div>
-        <div style="background:#fff;border-radius:14px;padding:10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);"><div style="font-size:1.5rem;margin-bottom:3px;">🔥</div><p style="font-size:.58rem;font-weight:800;color:rgba(0,0,0,.5);">Streak 7</p></div>
-        <div style="background:rgba(0,0,0,.04);border-radius:14px;padding:10px;text-align:center;border:2px dashed rgba(0,0,0,.1);opacity:.4;"><div style="font-size:1.5rem;margin-bottom:3px;">🏆</div><p style="font-size:.58rem;font-weight:800;color:rgba(0,0,0,.4);">Terkunci</p></div>
+
+      <p class="sec-lbl">🏅 Lencana Prestasi</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px;">
+        <div style="background:#fff;border-radius:14px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);"><div style="font-size:1.6rem;margin-bottom:4px;">🌟</div><p style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.6);">Pemula</p></div>
+        <div style="background:#fff;border-radius:14px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);"><div style="font-size:1.6rem;margin-bottom:4px;">📱</div><p style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.6);">QRIS Pro</p></div>
+        <div style="background:#fff;border-radius:14px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);"><div style="font-size:1.6rem;margin-bottom:4px;">🔥</div><p style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.6);">Streak 7</p></div>
+        <div style="background:rgba(0,0,0,.04);border-radius:14px;padding:12px;text-align:center;border:2px dashed rgba(0,0,0,.1);opacity:.4;"><div style="font-size:1.6rem;margin-bottom:4px;">🏆</div><p style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.4);">Terkunci</p></div>
       </div>
-      <button onclick="location.href='index.html'" style="width:100%;background:#fff;border:2px solid rgba(255,77,141,0.2);color:var(--p);border-radius:14px;padding:12px;font-size:.82rem;font-weight:800;font-family:inherit;cursor:pointer;">🚪 Keluar</button>
+      
+      <div style="background:rgba(255,107,53,0.1);border-radius:16px;padding:16px;margin-bottom:20px;border:1px solid rgba(255,107,53,0.2);">
+        <p style="font-size:.8rem;font-weight:800;color:#111;margin-bottom:4px;">Akun Orang Tua Terhubung</p>
+        <p style="font-size:.65rem;color:rgba(0,0,0,.5);margin-bottom:8px;">Ayah Budi Pratama (0812-xxxx-1234)</p>
+        <span style="font-size:.6rem;background:var(--g);color:#fff;padding:4px 8px;border-radius:9px;font-weight:700;">✅ Verified</span>
+      </div>
+
+      <button onclick="location.href='#'" style="width:100%;background:#fff;border:2px solid rgba(255,77,141,0.2);color:var(--p);border-radius:14px;padding:14px;font-size:.85rem;font-weight:800;font-family:inherit;cursor:pointer;">🚪 Keluar Akun</button>
     </div>
 
   </div><!-- end phone-body -->
@@ -493,18 +483,28 @@ function switchTab(name){
     document.getElementById('tab-'+t).classList.remove('active');
     const nav = document.getElementById('nav-'+t);
     nav.classList.remove('active');
-    nav.querySelector('span:last-child').style.color='rgba(0,0,0,.3)';
-    nav.querySelector('span:last-child').style.fontWeight='700';
+    
+    // Perbaikan: gunakan last-of-type agar tidak tertukar dengan div.nav-dot
+    const labelText = nav.querySelector('span:last-of-type');
+    if(labelText) {
+      labelText.style.color='rgba(0,0,0,.3)';
+      labelText.style.fontWeight='700';
+    }
+    
     const dot = nav.querySelector('.nav-dot');
     if(dot) dot.remove();
   });
   document.getElementById('tab-'+name).classList.add('active');
   const activeNav = document.getElementById('nav-'+name);
   activeNav.classList.add('active');
-  const label = activeNav.querySelector('span:last-child');
-  label.style.color='var(--o)'; label.style.fontWeight='800';
+  
+  const activeLabel = activeNav.querySelector('span:last-of-type');
+  if(activeLabel) {
+    activeLabel.style.color='var(--o)'; 
+    activeLabel.style.fontWeight='800';
+  }
+  
   if(!activeNav.querySelector('.nav-dot')){ const d=document.createElement('div'); d.className='nav-dot'; activeNav.appendChild(d); }
-  // Reset scroll
   document.querySelector('.phone-body').scrollTop=0;
 }
 
@@ -521,6 +521,7 @@ function updateLimit(){
   else if(pct<=50) bar.style.background='rgba(255,214,10,0.9)';
   else bar.style.background='rgba(255,255,255,0.88)';
   document.getElementById('recSisa').textContent='Rp'+fmt(curLimit);
+  document.getElementById('failSisa').textContent='Rp'+fmt(curLimit);
 }
 
 // ===== PHONE TOAST =====
@@ -535,7 +536,6 @@ function showPhoneToast(icon,title,body,type='success'){
   setTimeout(()=>{ t.style.transform='translateY(-10px) scale(.95)'; t.style.opacity='0'; setTimeout(()=>t.remove(),300); },4000);
 }
 
-// ===== COIN POP =====
 function spawnCoins(){
   const ph=document.getElementById('phoneRoot');
   ['🪙','⭐','✨'].forEach((e,i)=>{
@@ -571,13 +571,10 @@ function startScan(){
   const laser=document.getElementById('scanLaser');
   const fakeQr=document.getElementById('fakeQr');
 
-  // Reset state
   merchantInfo.style.opacity='0'; fakeQr.classList.remove('show'); detectFlash.style.animation='';
-
   overlay.classList.add('show');
   buildFakeQR();
 
-  // Build fake camera feed (colored blobs)
   const feed=document.getElementById('camFeed');
   feed.innerHTML='';
   const blobColors=['rgba(255,107,53,0.3)','rgba(255,77,141,0.25)','rgba(123,47,190,0.2)','rgba(6,214,160,0.2)','rgba(255,214,10,0.15)'];
@@ -586,25 +583,17 @@ function startScan(){
     b.style.cssText=`position:absolute;width:${80+Math.random()*120}px;height:${80+Math.random()*120}px;border-radius:50%;background:${blobColors[i%blobColors.length]};filter:blur(${30+Math.random()*20}px);top:${Math.random()*80}%;left:${Math.random()*80}%;`;
     feed.appendChild(b);
   }
-  // Add some "noise" particles
-  for(let i=0;i<20;i++){
-    const p=document.createElement('div');
-    p.style.cssText=`position:absolute;width:${1+Math.random()*3}px;height:${1+Math.random()*3}px;background:rgba(255,255,255,${0.1+Math.random()*0.3});border-radius:50%;top:${Math.random()*100}%;left:${Math.random()*100}%;`;
-    feed.appendChild(p);
-  }
 
   camText.textContent='Membuka Kamera...';
   camSub.textContent='Siapkan kode QRIS-nya ya!';
 
-  // Timeline
   setTimeout(()=>{ camText.textContent='Mencari Kode QRIS...'; camSub.textContent='Arahkan ke kode QRIS merchant'; },900);
   setTimeout(()=>{ fakeQr.classList.add('show'); },1600);
   setTimeout(()=>{
-    // Detected!
     detectFlash.style.animation='flashGreen .6s ease forwards';
     camText.textContent='QRIS Terdeteksi! ✅';
     camText.style.color='#06D6A0';
-    camSub.textContent='Memproses pembayaran...';
+    camSub.textContent='Siap verifikasi...';
     merchantInfo.style.opacity='1';
     laser.style.animationPlayState='paused';
     laser.style.background='linear-gradient(90deg,transparent,#06D6A0,transparent)';
@@ -613,9 +602,8 @@ function startScan(){
     overlay.classList.remove('show');
     camText.style.color='#fff';
     laser.style.animationPlayState='running'; laser.style.background='';
-    document.getElementById('pinOverlay').classList.add('show');
-    currentPin = "";
-    updatePinDots();
+    
+    openPinInput();
   },3600);
 }
 
@@ -627,9 +615,115 @@ function cancelScan(){
   scanning=false;
 }
 
-function closeReceipt(){
-  document.getElementById('receiptOverlay').classList.remove('show');
-  showPhoneToast('✅','Pembayaran Berhasil!','Rp10.000 dibayar di Kantin Bu Yati. Sisa limit Rp'+fmt(curLimit),'success');
+// ===== PIN OVERLAY LOGIC =====
+let currentPin = '';
+function openPinInput() {
+  currentPin = '';
+  updatePinDots();
+  document.getElementById('pinLoading').style.opacity = '0';
+  document.getElementById('pinOverlay').classList.add('show');
+}
+
+function typePin(num) {
+  if (currentPin.length < 6) {
+    currentPin += num;
+    updatePinDots();
+    if (currentPin.length === 6) {
+      verifyPin();
+    }
+  }
+}
+
+function delPin() {
+  if (currentPin.length > 0) {
+    currentPin = currentPin.slice(0, -1);
+    updatePinDots();
+  }
+}
+
+function updatePinDots() {
+  const dots = document.querySelectorAll('#pinDots .pin-dot');
+  dots.forEach((dot, index) => {
+    if (index < currentPin.length) dot.classList.add('filled');
+    else dot.classList.remove('filled');
+  });
+}
+
+function verifyPin() {
+  document.getElementById('pinLoading').style.opacity = '1';
+  setTimeout(() => {
+    document.getElementById('pinOverlay').classList.remove('show');
+    finishPayment(); 
+  }, 700);
+}
+
+function cancelPin() {
+  document.getElementById('pinOverlay').classList.remove('show');
+  scanning=false;
+  document.getElementById('scanBtn').disabled=false;
+  document.getElementById('scanBtn').style.opacity='1';
+  showPhoneToast('❌','Dibatalkan','Pembayaran dibatalkan.','error');
+}
+
+// ===== FINISH PAYMENT (WITH BALANCE CHECK) =====
+let trxCount = 24; // Dummy trx count
+function finishPayment() {
+  const deduct = 10000;
+  
+  if (curLimit < deduct) {
+    // SALDO HABIS -> MUNCULIN RECEIPT GAGAL
+    document.getElementById('receiptFailOverlay').classList.add('show');
+  } else {
+    // SALDO CUKUP -> SUKSES
+    curLimit -= deduct; usedTotal += deduct;
+    updateLimit(); spawnCoins();
+    document.getElementById('receiptOverlay').classList.add('show');
+    
+    // Tambah dinamis ke Tab Riwayat (di paling atas)
+    addHistoryItem('Kantin Bu Yati', 'Jajan QRIS (Baru)', deduct);
+    
+    // Update Trx Profil
+    trxCount++;
+    document.getElementById('trxTotal').textContent = trxCount;
+  }
+  
+  document.getElementById('scanBtn').disabled=false;
+  document.getElementById('scanBtn').style.opacity='1';
+  scanning=false;
+}
+
+// Fitur nambah riwayat dinamis biar kerasa live
+function addHistoryItem(title, desc, amount) {
+  const list = document.getElementById('histList');
+  const homeList = document.getElementById('homeRecentHist');
+  
+  const htmlStr = `<div class="h-icon" style="background:#fff7ed;">🍱</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">${title}</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">Baru saja · ${desc}</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp${fmt(amount)}</span>`;
+  
+  // Create for Tab Riwayat
+  const item = document.createElement('div');
+  item.className = 'hist-item';
+  item.dataset.t = 'keluar';
+  item.innerHTML = htmlStr;
+  
+  // Insert exactly after "Hari Ini" text in Tab Riwayat
+  const lbl = document.getElementById('histTodayLbl');
+  list.insertBefore(item, lbl.nextSibling);
+
+  // Create for Beranda Recent
+  const homeItem = document.createElement('div');
+  homeItem.className = 'hist-item';
+  homeItem.onclick = () => switchTab('riwayat');
+  homeItem.innerHTML = htmlStr;
+  homeList.prepend(homeItem);
+}
+
+function closeReceipt(type){
+  if(type === 'success') {
+    document.getElementById('receiptOverlay').classList.remove('show');
+    showPhoneToast('✅','Pembayaran Berhasil!','Sisa limit jajan Rp'+fmt(curLimit),'success');
+  } else {
+    document.getElementById('receiptFailOverlay').classList.remove('show');
+  }
 }
 
 // ===== HISTORY FILTER =====
@@ -643,9 +737,9 @@ function filterHist(el,type){
 const phoneTourSteps=[
   { icon:'👋', title:'Halo Dafi!', body:'Ini adalah aplikasi KOIN kamu! Di sini kamu bisa bayar jajan pakai QRIS, lihat sisa uang, dan selesaikan misi seru.', target:null },
   { icon:'💰', title:'Sisa Limit Jajan', body:'Bar ini menunjukkan berapa sisa uang jajan kamu hari ini. Kalau sudah habis, kamu nggak bisa bayar lagi ya!', target:'balCard' },
-  { icon:'📷', title:'Tombol SCAN QRIS', body:'Tekan tombol besar ini untuk bayar di kantin, koperasi, atau warung yang punya QRIS. Mudah banget!', target:'scanArea' },
+  { icon:'📷', title:'Tombol SCAN QRIS', body:'Tekan tombol besar ini untuk bayar di kantin. Nanti kamu akan diminta masukin PIN buat bayar!', target:'scanArea' },
   { icon:'🗺️', title:'Misi & Tantangan', body:'Selesaikan misi untuk dapetin XP dan naik level! Ada hadiah keren menanti kamu. Cek tab Misi ya!', target:null },
-  { icon:'🏆', title:'Siap Bertualang!', body:'Kamu sudah siap pakai KOIN! Jangan lupa hemat ya, biar bisa nabung buat impian kamu. Semangat! 🌟', target:null },
+  { icon:'🏆', title:'Siap Bertualang!', body:'Kamu sudah siap pakai KOIN! Jangan lupa klik tab-tab di bawah buat liat fitur lainnya ya. Semangat! 🌟', target:null },
 ];
 let phoneTourIdx=0;
 
@@ -654,57 +748,6 @@ function startPhoneTour(){
   phoneTourIdx=0;
   renderPhoneTour();
 }
-
-let currentPin = "";
-function pressPin(num) {
-  if (currentPin.length < 6) {
-    currentPin += num;
-    updatePinDots();
-    
-    // Jika PIN sudah 6 digit, proses pembayaran
-    if (currentPin.length === 6) {
-      setTimeout(() => {
-        document.getElementById('pinOverlay').classList.remove('show');
-        
-        // Deduct saldo & limit
-        const deduct = 10000;
-        curLimit -= deduct; usedTotal += deduct;
-        updateLimit(); spawnCoins();
-
-        // Tampilkan Struk
-        document.getElementById('receiptOverlay').classList.add('show');
-        
-        const btn = document.getElementById('scanBtn');
-        btn.disabled = false; btn.style.opacity = '1';
-        scanning = false;
-      }, 400); // Jeda sedikit biar user liat dot terakhir keisi
-    }
-  }
-}
-
-function delPin() {
-  if (currentPin.length > 0) {
-    currentPin = currentPin.slice(0, -1);
-    updatePinDots();
-  }
-}
-
-function updatePinDots() {
-  const dots = document.querySelectorAll('.pin-dot');
-  dots.forEach((dot, index) => {
-    if (index < currentPin.length) dot.classList.add('filled');
-    else dot.classList.remove('filled');
-  });
-}
-
-function cancelPin() {
-  document.getElementById('pinOverlay').classList.remove('show');
-  const btn = document.getElementById('scanBtn');
-  btn.disabled = false; btn.style.opacity = '1';
-  scanning = false;
-  showPhoneToast('❌', 'Dibatalkan', 'Transaksi QRIS dibatalkan.', 'error');
-}
-
 function renderPhoneTour(){
   const step=phoneTourSteps[phoneTourIdx];
   document.getElementById('ptIcon').textContent=step.icon;
@@ -714,7 +757,6 @@ function renderPhoneTour(){
   const dots=document.getElementById('ptDots');
   dots.innerHTML=phoneTourSteps.map((_,i)=>`<div style="width:6px;height:6px;border-radius:50%;background:${i===phoneTourIdx?'var(--y)':'rgba(255,255,255,0.2)'}"></div>`).join('');
 
-  // Position card
   const card=document.getElementById('phoneTourCard');
   const target=step.target?document.getElementById(step.target):null;
   if(target){
@@ -737,7 +779,7 @@ function phoneTourNext(){
 function endPhoneTour(){
   document.getElementById('phoneOverlay').style.display='none';
   document.getElementById('phoneTourCard').classList.remove('show');
-  showPhoneToast('🎉','Tur Selesai!','Selamat! Kamu sudah siap pakai KOIN. Semangat hemat!','success');
+  showPhoneToast('🎉','Tur Selesai!','Selamat! Kamu sudah siap pakai KOIN. Cobain klik tab di bawah!','success');
 }
 
 // Auto start tour
