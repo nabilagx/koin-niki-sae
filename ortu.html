@@ -231,12 +231,17 @@
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px;">
         <div class="stat-card gold" id="t-saldo">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-            <p style="font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.08em;">Saldo Master</p>
-            <div class="ib" style="background:rgba(255,214,10,0.1);">💰</div>
-          </div>
-          <p class="fredoka" style="font-size:1.85rem;color:var(--yellow);">Rp500.000</p>
-          <p style="font-size:0.64rem;color:rgba(255,255,255,0.3);margin-top:5px;">↑ Top-up 3 hari lalu</p>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <p style="font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.08em;">Saldo Master</p>
+                <div class="ib" style="background:rgba(255,214,10,0.1);">💰</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                <div>
+                <p class="fredoka" style="font-size:1.85rem;color:var(--yellow);">Rp500.000</p>
+                <p style="font-size:0.64rem;color:rgba(255,255,255,0.3);margin-top:5px;">↑ Top-up 3 hari lalu</p>
+                </div>
+                <button onclick="openTopUp()" style="background:rgba(255,214,10,0.15); border:1px solid rgba(255,214,10,0.3); color:var(--yellow); padding:8px 14px; border-radius:12px; font-size:0.75rem; font-weight:800; cursor:pointer; font-family:inherit; transition:0.2s;">+ Top Up</button>
+            </div>
         </div>
         <div class="stat-card green" id="t-limit">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
@@ -501,6 +506,26 @@
   </div>
 </div>
 
+<div id="topupModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(5px); z-index:9000; display:none; align-items:center; justify-content:center;">
+  <div id="topupCard" style="background:linear-gradient(135deg,#1e3060,#162444); border:1px solid rgba(255,214,10,0.2); border-radius:24px; padding:24px; width:320px; box-shadow:0 20px 50px rgba(0,0,0,0.5); transform:scale(0.9); opacity:0; transition:all 0.3s cubic-bezier(.34,1.56,.64,1);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h3 style="font-size:1.1rem; font-weight:800; color:#fff;">Top Up Saldo Master</h3>
+      <button onclick="closeTopUp()" style="background:none; border:none; color:rgba(255,255,255,0.4); font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <p style="font-size:0.75rem; color:rgba(255,255,255,0.6); margin-bottom:16px; line-height:1.5;">Transfer dari m-Banking atau ATM ke nomor Virtual Account KOIN kamu:</p>
+    
+    <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:18px; text-align:center; margin-bottom:20px;">
+      <p style="font-size:0.7rem; color:var(--green); font-weight:800; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.1em;">Bank BCA</p>
+      <p class="fredoka" id="vaNumber" style="font-size:1.5rem; color:#fff; letter-spacing:2px;">3901 0812 3456</p>
+      <p style="font-size:0.65rem; color:rgba(255,255,255,0.3); margin-top:6px;">a.n. KOIN - Budi Pratama</p>
+    </div>
+    
+    <button class="btn-y" onclick="copyVA()" style="display:flex; align-items:center; justify-content:center; gap:8px;">
+      <span>📋</span> Salin Nomor VA
+    </button>
+  </div>
+</div>
+
 <script>
 // ===== PAGE NAVIGATION =====
 const titles = {ringkasan:'Ringkasan',riwayat:'Riwayat Transaksi',limit:'Atur Limit',ai:'AI Insight',notif:'Notifikasi',settings:'Pengaturan'};
@@ -666,7 +691,32 @@ function endTour(){
   showPage('ringkasan');
   showToast('success','🎉','Tur Selesai!','Kamu sudah mengenal semua fitur KOIN. Selamat memantau keuangan Dafi!');
 }
+function openTopUp() {
+  const modal = document.getElementById('topupModal');
+  const card = document.getElementById('topupCard');
+  modal.style.display = 'flex';
+  // Trigger animasi
+  setTimeout(() => {
+    card.style.transform = 'scale(1)';
+    card.style.opacity = '1';
+  }, 10);
+}
 
+function closeTopUp() {
+  const modal = document.getElementById('topupModal');
+  const card = document.getElementById('topupCard');
+  card.style.transform = 'scale(0.9)';
+  card.style.opacity = '0';
+  setTimeout(() => { modal.style.display = 'none'; }, 300);
+}
+
+function copyVA() {
+  const va = document.getElementById('vaNumber').innerText.replace(/\s/g, '');
+  navigator.clipboard.writeText(va).then(() => {
+    closeTopUp();
+    showToast('success', '📋', 'Berhasil Disalin!', 'Nomor VA berhasil disalin ke clipboard. Silakan buka aplikasi m-Banking kamu.');
+  });
+}
 // Auto-start tour on load
 window.addEventListener('load', ()=>{
   setTimeout(()=>{ startTour(); }, 800);
