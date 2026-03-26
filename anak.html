@@ -183,32 +183,46 @@
   <!-- Payment Receipt Overlay -->
   <div id="receiptOverlay">
     <div id="pinOverlay">
-        <div style="background:rgba(255,214,10,0.15); width:50px; height:50px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin-bottom:16px;">🔒</div>
-        <p class="fredoka" style="color:#fff; font-size:1.4rem; margin-bottom:6px;">Masukkan PIN</p>
-        <p style="color:rgba(255,255,255,0.5); font-size:0.75rem; margin-bottom:32px;">Kantin Bu Yati • Rp10.000</p>
-        
-        <div style="display:flex; gap:16px; margin-bottom:40px;" id="pinDots">
-            <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
-            <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
-        </div>
+    <div style="background:rgba(255,214,10,0.15); width:50px; height:50px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin-bottom:16px;">🔒</div>
+    <p class="fredoka" style="color:#fff; font-size:1.4rem; margin-bottom:6px;">Masukkan PIN</p>
+    <p style="color:rgba(255,255,255,0.5); font-size:0.75rem; margin-bottom:32px;">Kantin Bu Yati • Rp10.000</p>
+    
+    <div style="display:flex; gap:16px; margin-bottom:40px;" id="pinDots">
+      <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+      <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+    </div>
 
-        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:30px;">
-            <button class="numpad-btn" onclick="pressPin('1')">1</button>
-            <button class="numpad-btn" onclick="pressPin('2')">2</button>
-            <button class="numpad-btn" onclick="pressPin('3')">3</button>
-            <button class="numpad-btn" onclick="pressPin('4')">4</button>
-            <button class="numpad-btn" onclick="pressPin('5')">5</button>
-            <button class="numpad-btn" onclick="pressPin('6')">6</button>
-            <button class="numpad-btn" onclick="pressPin('7')">7</button>
-            <button class="numpad-btn" onclick="pressPin('8')">8</button>
-            <button class="numpad-btn" onclick="pressPin('9')">9</button>
-            <div></div>
-            <button class="numpad-btn" onclick="pressPin('0')">0</button>
-            <button class="numpad-btn" onclick="delPin()" style="font-size:1.2rem; background:none;">⌫</button>
-        </div>
-        
-        <button onclick="cancelPin()" style="background:none; border:none; color:rgba(255,255,255,0.4); font-size:0.8rem; font-weight:700; font-family:inherit; cursor:pointer;">Batalkan Transaksi</button>
-        </div>
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:30px;">
+      <button class="numpad-btn" onclick="pressPin('1')">1</button>
+      <button class="numpad-btn" onclick="pressPin('2')">2</button>
+      <button class="numpad-btn" onclick="pressPin('3')">3</button>
+      <button class="numpad-btn" onclick="pressPin('4')">4</button>
+      <button class="numpad-btn" onclick="pressPin('5')">5</button>
+      <button class="numpad-btn" onclick="pressPin('6')">6</button>
+      <button class="numpad-btn" onclick="pressPin('7')">7</button>
+      <button class="numpad-btn" onclick="pressPin('8')">8</button>
+      <button class="numpad-btn" onclick="pressPin('9')">9</button>
+      <div></div>
+      <button class="numpad-btn" onclick="pressPin('0')">0</button>
+      <button class="numpad-btn" onclick="delPin()" style="font-size:1.2rem; background:none;">⌫</button>
+    </div>
+    
+    <button onclick="cancelPin()" style="background:none; border:none; color:rgba(255,255,255,0.4); font-size:0.8rem; font-weight:700; font-family:inherit; cursor:pointer;">Batalkan Transaksi</button>
+  </div>
+
+  <div id="receiptOverlay">
+    <div class="receipt-card">
+      <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--g),#22d3ee);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 14px;">✅</div>
+      <p class="fredoka" style="color:#111;font-size:1.3rem;margin-bottom:4px;">Pembayaran Sukses!</p>
+      <p style="color:rgba(0,0,0,0.4);font-size:0.75rem;margin-bottom:18px;">via QRIS · Kantin Bu Yati</p>
+      <div style="background:#f9fafb;border-radius:14px;padding:14px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">Jumlah Bayar</span><span style="font-size:0.78rem;font-weight:800;color:#ef4444;">−Rp10.000</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">Sisa Limit</span><span id="recSisa" style="font-size:0.78rem;font-weight:800;color:#111;">Rp10.000</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">XP Diperoleh</span><span style="font-size:0.78rem;font-weight:800;color:var(--o);">+5 XP ⭐</span></div>
+      </div>
+      <button onclick="closeReceipt()" style="width:100%;background:linear-gradient(135deg,var(--o),var(--p));border:none;color:#fff;font-weight:800;font-size:0.88rem;padding:12px;border-radius:13px;cursor:pointer;font-family:inherit;">Oke, Makasih! 👍</button>
+    </div>
+  </div>
     <div class="receipt-card">
       <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--g),#22d3ee);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 14px;">✅</div>
       <p class="fredoka" style="color:#111;font-size:1.3rem;margin-bottom:4px;">Pembayaran Sukses!</p>
