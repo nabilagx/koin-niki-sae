@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KOIN — Kenali, Olah, Ingat, Nabung</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --yellow: #FFD60A;
+      --orange: #FF6B35;
+      --green:  #06D6A0;
+      --navy:   #0F1E3D;
+      --navy2:  #1B2D5B;
+      --pink:   #FF4D8D;
+      --purple: #7B2FBE;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--navy);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .fredoka { font-family: 'Fredoka One', cursive; }
+
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,214,10,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,214,10,0.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridDrift 25s linear infinite;
+    }
+    @keyframes gridDrift { to { background-position: 48px 48px; } }
+
+    .coin-particle {
+      position: fixed;
+      animation: floatCoin linear infinite;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @keyframes floatCoin {
+      0%   { transform: translateY(105vh) rotate(0deg);   opacity: 0; }
+      8%   { opacity: 0.7; }
+      92%  { opacity: 0.35; }
+      100% { transform: translateY(-10vh) rotate(400deg); opacity: 0; }
+    }
+
+    .mascot-glow {
+      position: absolute; inset: -30%;
+      background: radial-gradient(circle, rgba(255,214,10,0.4) 0%, transparent 65%);
+      border-radius: 50%;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%,100% { transform: scale(0.85); opacity: 0.6; }
+      50%      { transform: scale(1.15); opacity: 1; }
+    }
+    .mascot {
+      animation: mascotFloat 3s ease-in-out infinite;
+      position: relative; z-index: 2;
+      display: block;
+      filter: drop-shadow(0 12px 28px rgba(255,214,10,0.55));
+    }
+    @keyframes mascotFloat {
+      0%,100% { transform: translateY(0) rotate(-5deg) scale(1); }
+      50%      { transform: translateY(-18px) rotate(6deg) scale(1.05); }
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,214,10,0.18);
+      border-radius: 32px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .role-card {
+      border-radius: 22px;
+      cursor: pointer;
+      transition: transform 0.22s cubic-bezier(.34,1.56,.64,1), box-shadow 0.22s;
+      text-decoration: none;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    .role-card:hover { transform: translateY(-8px) scale(1.025); }
+    .role-card:active { transform: scale(0.96); }
+
+    .card-ortu {
+      background: linear-gradient(140deg, #1e3a7a 0%, #2d1b69 100%);
+      border: 2px solid rgba(123,47,190,0.45);
+      box-shadow: 0 16px 48px rgba(45,27,105,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .card-anak {
+      background: linear-gradient(140deg, #c93f10 0%, #c4154e 100%);
+      border: 2px solid rgba(255,214,10,0.35);
+      box-shadow: 0 16px 48px rgba(201,63,16,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+    .shine {
+      position: absolute; top: 0; left: -80%;
+      width: 60%; height: 100%;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+      transform: skewX(-15deg);
+      transition: left 0.55s ease;
+    }
+    .role-card:hover .shine { left: 140%; }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .stat-bar {
+      background: rgba(255,214,10,0.06);
+      border: 1px solid rgba(255,214,10,0.14);
+      border-radius: 16px;
+    }
+
+    .arrow-btn {
+      background: rgba(255,255,255,0.14);
+      border-radius: 10px; padding: 7px;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .role-card:hover .arrow-btn {
+      background: rgba(255,255,255,0.26);
+      transform: translateX(5px);
+    }
+
+    .trust-item {
+      display: flex; align-items: center; gap: 5px;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.68rem; font-weight: 600;
+    }
+
+    @keyframes dotPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(6,214,160,0.6); }
+      50%      { box-shadow: 0 0 0 5px rgba(6,214,160,0); }
+    }
+    .live-dot { animation: dotPulse 2s infinite; }
+  </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div id="particles" style="position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;"></div>
+
+<div style="position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;">
+
+  <!-- Live badge -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:28px;">
+    <div class="live-dot" style="width:7px;height:7px;border-radius:50%;background:var(--green);"></div>
+    <span style="color:rgba(255,255,255,0.45);font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">Prototype Beta · 2025</span>
+  </div>
+
+  <!-- MAIN CARD -->
+  <div class="hero-card" style="max-width:460px;width:100%;padding:40px 28px 32px;">
+
+    <!-- Mascot -->
+    <div style="text-align:center;margin-bottom:18px;">
+      <div style="position:relative;display:inline-block;">
+        <div class="mascot-glow"></div>
+        <span class="mascot" style="font-size:5.5rem;">🪙</span>
+      </div>
+    </div>
+
+    <!-- Brand -->
+    <div style="text-align:center;margin-bottom:6px;">
+      <h1 class="fredoka" style="font-size:4.2rem;color:var(--yellow);letter-spacing:0.03em;line-height:1;text-shadow:0 0 40px rgba(255,214,10,0.45);">KOIN</h1>
+    </div>
+
+    <p style="text-align:center;color:rgba(255,255,255,0.4);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:700;margin-bottom:10px;">
+      Kenali · Olah · Ingat · Nabung
+    </p>
+
+    <p style="text-align:center;color:rgba(255,255,255,0.65);font-size:0.9rem;line-height:1.65;margin-bottom:26px;">
+      Platform literasi keuangan &amp; dompet digital<br/>
+      <span style="color:var(--green);font-weight:700;">khusus anak sekolah Indonesia.</span>
+    </p>
+
+    <!-- Stats -->
+    <div class="stat-bar" style="display:flex;padding:14px 0;margin-bottom:26px;">
+      <div style="flex:1;text-align:center;">
+        <p class="fredoka" style="color:var(--yellow);font-size:1.5rem;line-height:1;">2.4K+</p>
+        <p style="color:rgba(255,255,255,0.38);font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Pengguna</p>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.08);"></div>
+      <div style="flex:1;text-align:center;">
+        <p class="fredoka" style="color:var(--green);font-size:1.5rem;line-height:1;">48</p>
+        <p style="color:rgba(255,255,255,0.38);font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Sekolah</p>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.08);"></div>
+      <div style="flex:1;text-align:center;">
+        <p class="fredoka" style="color:var(--orange);font-size:1.5rem;line-height:1;">99%</p>
+        <p style="color:rgba(255,255,255,0.38);font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Puas</p>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+      <span style="color:rgba(255,255,255,0.28);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;">Masuk sebagai</span>
+      <div style="flex:1;height:1px;background:rgba(255,255,255,0.08);"></div>
+    </div>
+
+    <!-- Role cards -->
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:26px;">
+
+      <a href="ortu.html" class="role-card card-ortu">
+        <div class="shine"></div>
+        <div style="padding:18px 20px;display:flex;align-items:center;gap:14px;position:relative;z-index:2;">
+          <div style="font-size:2.8rem;flex-shrink:0;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.4));">👨‍👩‍👧</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+              <span class="fredoka" style="color:#fff;font-size:1.2rem;">Orang Tua</span>
+              <span class="pill">🛡️ Full Control</span>
+            </div>
+            <p style="color:rgba(255,255,255,0.55);font-size:0.75rem;line-height:1.5;">Limit harian, pantau transaksi,<br/>laporan AI & analitik mendalam</p>
+          </div>
+          <div class="arrow-btn">
+            <svg width="16" height="16" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </a>
+
+      <a href="anak.html" class="role-card card-anak">
+        <div class="shine"></div>
+        <div style="position:absolute;top:10px;right:14px;z-index:3;background:var(--yellow);color:#0F1E3D;font-size:0.58rem;font-weight:800;padding:3px 9px;border-radius:999px;letter-spacing:0.06em;">
+          ⚡ 3 MISI AKTIF
+        </div>
+        <div style="padding:18px 20px;display:flex;align-items:center;gap:14px;position:relative;z-index:2;">
+          <div style="font-size:2.8rem;flex-shrink:0;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.4));">🎒</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+              <span class="fredoka" style="color:#fff;font-size:1.2rem;">Anak</span>
+              <span class="pill">🎮 Gamifikasi</span>
+            </div>
+            <p style="color:rgba(255,255,255,0.8);font-size:0.75rem;line-height:1.5;">Bayar QRIS, selesaikan misi,<br/>kumpulkan bintang &amp; hadiah keren!</p>
+          </div>
+          <div class="arrow-btn">
+            <svg width="16" height="16" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Trust -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+      <div class="trust-item">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        SSL Terenkripsi
+      </div>
+      <div class="trust-item">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Realtime 24/7
+      </div>
+      <div class="trust-item">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        OJK Compliant
+      </div>
+    </div>
+
+  </div>
+
+  <p style="margin-top:20px;color:rgba(255,255,255,0.16);font-size:0.65rem;font-weight:600;letter-spacing:0.06em;">
+    © 2025 KOIN · Dibuat dengan ❤️ untuk anak Indonesia
+  </p>
+
+</div>
+
+<script>
+  const emojis = ['🪙','⭐','✨','💫','🌟'];
+  const container = document.getElementById('particles');
+  function spawn() {
+    const el = document.createElement('div');
+    el.className = 'coin-particle';
+    el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.left = (Math.random()*98) + 'vw';
+    el.style.fontSize = (0.9 + Math.random()*1.4) + 'rem';
+    const d = 7 + Math.random()*9;
+    el.style.animationDuration = d + 's';
+    el.style.animationDelay = (Math.random()*3) + 's';
+    container.appendChild(el);
+    setTimeout(() => el.remove(), (d+4)*1000);
+  }
+  for (let i=0;i<14;i++) spawn();
+  setInterval(spawn, 1600);
+</script>
+</body>
+</html>

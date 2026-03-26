@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KOIN — Dashboard Orang Tua</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --yellow: #FFD60A;
+      --orange: #FF6B35;
+      --green:  #06D6A0;
+      --navy:   #0F1E3D;
+      --navy2:  #162444;
+      --navy3:  #1e3060;
+      --purple: #7B2FBE;
+      --pink:   #FF4D8D;
+      --card-bg: rgba(255,255,255,0.04);
+      --border:  rgba(255,255,255,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--navy); color: #fff; display: flex; min-height: 100vh; }
+    .fredoka { font-family: 'Fredoka One', cursive; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    /* SIDEBAR */
+    #sidebar {
+      width: 230px; min-height: 100vh; flex-shrink: 0;
+      background: var(--navy2);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 18px; border-radius: 12px;
+      font-size: 0.82rem; font-weight: 600;
+      color: rgba(255,255,255,0.45);
+      cursor: pointer; transition: all 0.18s;
+      text-decoration: none;
+    }
+    .nav-link:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
+    .nav-link.active {
+      background: rgba(255,214,10,0.12);
+      color: var(--yellow);
+      border: 1px solid rgba(255,214,10,0.2);
+    }
+    .nav-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+    /* HEADER */
+    #topbar {
+      background: rgba(15,30,61,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 40;
+    }
+
+    /* CARDS */
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.14); }
+
+    .stat-card.gold {
+      background: linear-gradient(135deg, rgba(255,214,10,0.12) 0%, rgba(255,107,53,0.08) 100%);
+      border-color: rgba(255,214,10,0.25);
+    }
+    .stat-card.green {
+      background: linear-gradient(135deg, rgba(6,214,160,0.1) 0%, rgba(6,214,160,0.04) 100%);
+      border-color: rgba(6,214,160,0.2);
+    }
+    .stat-card.purple {
+      background: linear-gradient(135deg, rgba(123,47,190,0.15) 0%, rgba(123,47,190,0.05) 100%);
+      border-color: rgba(123,47,190,0.25);
+    }
+
+    /* TABLE */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table thead th {
+      padding: 10px 16px; font-size: 0.65rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3);
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .data-table tbody tr { transition: background 0.15s; }
+    .data-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+    .data-table tbody td {
+      padding: 13px 16px; font-size: 0.82rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* STATUS BADGES */
+    .badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 999px; font-size: 0.62rem; font-weight: 800;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .badge-success { background: rgba(6,214,160,0.15); color: var(--green); border: 1px solid rgba(6,214,160,0.25); }
+    .badge-warn    { background: rgba(255,214,10,0.15); color: var(--yellow); border: 1px solid rgba(255,214,10,0.25); }
+
+    /* FORM */
+    .form-input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 11px 16px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus {
+      border-color: var(--yellow);
+      box-shadow: 0 0 0 3px rgba(255,214,10,0.12);
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.25); font-weight: 400; }
+    .form-label {
+      display: block; font-size: 0.68rem; font-weight: 800;
+      color: rgba(255,255,255,0.4); text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 7px;
+    }
+
+    .btn-primary {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%);
+      color: #0F1E3D; font-weight: 800; font-size: 0.88rem;
+      border: none; border-radius: 13px; cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      box-shadow: 0 8px 24px rgba(255,107,53,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255,107,53,0.45); }
+    .btn-primary:active { transform: scale(0.97); }
+
+    /* Progress bar */
+    .progress-track { background: rgba(255,255,255,0.08); border-radius: 999px; height: 6px; overflow: hidden; }
+    .progress-fill  { height: 100%; border-radius: 999px; transition: width 0.8s cubic-bezier(.34,1,.64,1); }
+
+    /* Sidebar mobile */
+    @media (max-width: 768px) {
+      #sidebar { position: fixed; left: 0; top: 0; z-index: 50; transform: translateX(-100%); transition: transform 0.25s; }
+      #sidebar.open { transform: translateX(0); }
+      #overlay { display: block !important; }
+    }
+
+    /* Icon box */
+    .icon-box {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div style="padding:22px 18px 16px;border-bottom:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="background:linear-gradient(135deg,#ffd60a,#ff6b35);border-radius:12px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 4px 14px rgba(255,107,53,0.4);">🪙</div>
+      <span class="fredoka" style="font-size:1.6rem;color:var(--yellow);">KOIN</span>
+    </div>
+    <p style="color:rgba(255,255,255,0.3);font-size:0.68rem;font-weight:600;margin-top:4px;margin-left:2px;letter-spacing:0.05em;">Panel Orang Tua</p>
+  </div>
+
+  <nav style="padding:16px 10px;flex:1;">
+    <p style="color:rgba(255,255,255,0.2);font-size:0.6rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;padding:0 10px;margin-bottom:8px;">Menu</p>
+    <a href="#" class="nav-link active"><span class="nav-icon">📊</span>Ringkasan</a>
+    <a href="#" class="nav-link"><span class="nav-icon">📋</span>Riwayat</a>
+    <a href="#" class="nav-link"><span class="nav-icon">🎯</span>Atur Limit</a>
+    <a href="#" class="nav-link"><span class="nav-icon">🤖</span>AI Insight <span style="background:var(--purple);color:#fff;font-size:0.55rem;padding:2px 7px;border-radius:999px;margin-left:4px;font-weight:700;">PRO</span></a>
+    <a href="#" class="nav-link" style="margin-top:8px;"><span class="nav-icon">🔔</span>Notifikasi</a>
+    <a href="#" class="nav-link"><span class="nav-icon">⚙️</span>Pengaturan</a>
+  </nav>
+
+  <div style="padding:14px 10px;border-top:1px solid var(--border);">
+    <div style="background:rgba(255,255,255,0.04);border-radius:14px;padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;">
+      <div style="background:linear-gradient(135deg,#7b2fbe,#2d4a9b);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0;">BP</div>
+      <div style="min-width:0;">
+        <p style="font-weight:700;font-size:0.8rem;color:rgba(255,255,255,0.9);">Budi Pratama</p>
+        <p style="font-size:0.65rem;color:rgba(255,255,255,0.35);">Orang Tua · Free Plan</p>
+      </div>
+    </div>
+    <a href="index.html" class="nav-link" style="color:rgba(255,77,141,0.7);font-size:0.78rem;">
+      <span>🚪</span> Keluar
+    </a>
+  </div>
+</aside>
+
+<!-- OVERLAY mobile -->
+<div id="overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:40;" onclick="toggleSidebar()"></div>
+
+<!-- MAIN -->
+<div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow-x:hidden;">
+
+  <!-- TOPBAR -->
+  <header id="topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button onclick="toggleSidebar()" style="display:none;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:10px;padding:8px;cursor:pointer;color:#fff;" id="menuBtn">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div>
+        <h1 style="font-size:1.1rem;font-weight:800;">Dashboard</h1>
+        <p style="font-size:0.7rem;color:rgba(255,255,255,0.35);margin-top:1px;">Kamis, 26 Juni 2025 · <span style="color:var(--green);">● Online</span></p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:rgba(255,255,255,0.55);font-size:0.75rem;font-weight:600;cursor:pointer;font-family:inherit;">
+        🔔 <span style="background:var(--pink);color:#fff;border-radius:999px;padding:1px 6px;font-size:0.6rem;font-weight:800;margin-left:4px;">3</span>
+      </button>
+      <div style="background:linear-gradient(135deg,#7b2fbe,#2d4a9b);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;">BP</div>
+    </div>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  <main style="padding:28px;flex:1;overflow-y:auto;max-width:1100px;width:100%;">
+
+    <!-- Greeting -->
+    <div style="margin-bottom:26px;">
+      <h2 style="font-size:1.35rem;font-weight:800;">Selamat pagi, Pak Budi! 👋</h2>
+      <p style="color:rgba(255,255,255,0.4);font-size:0.82rem;margin-top:4px;">Dafi sudah pakai <strong style="color:var(--yellow);">Rp15.000</strong> dari limit harian. Pantau terus ya.</p>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;">
+
+      <div class="stat-card gold">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <p style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em;">Saldo Master</p>
+          <div class="icon-box" style="background:rgba(255,214,10,0.12);">💰</div>
+        </div>
+        <p class="fredoka" style="font-size:1.9rem;color:var(--yellow);line-height:1;">Rp500.000</p>
+        <p style="font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:6px;">↑ Top-up 3 hari lalu</p>
+      </div>
+
+      <div class="stat-card green">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <p style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em;">Limit Hari Ini</p>
+          <div class="icon-box" style="background:rgba(6,214,160,0.12);">🎯</div>
+        </div>
+        <p class="fredoka" style="font-size:1.9rem;color:var(--green);line-height:1;">Rp20.000</p>
+        <div style="margin-top:10px;">
+          <div class="progress-track">
+            <div class="progress-fill" style="width:75%;background:linear-gradient(90deg,var(--green),#22d3ee);"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:5px;">
+            <p style="font-size:0.62rem;color:rgba(255,255,255,0.3);">Terpakai 75%</p>
+            <p style="font-size:0.62rem;color:var(--green);font-weight:700;">Sisa Rp5.000</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card purple">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <p style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em;">Minggu Ini</p>
+          <div class="icon-box" style="background:rgba(123,47,190,0.2);">📈</div>
+        </div>
+        <p class="fredoka" style="font-size:1.9rem;color:#a78bfa;line-height:1;">Rp85.000</p>
+        <p style="font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:6px;">6 transaksi · 5 hari</p>
+      </div>
+
+      <div class="stat-card" style="background:linear-gradient(135deg,rgba(255,77,141,0.12),rgba(255,77,141,0.04));border-color:rgba(255,77,141,0.2);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <p style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em;">Poin Misi Dafi</p>
+          <div class="icon-box" style="background:rgba(255,77,141,0.15);">⭐</div>
+        </div>
+        <p class="fredoka" style="font-size:1.9rem;color:var(--pink);line-height:1;">85 XP</p>
+        <p style="font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:6px;">Level 3 · Penabung Pemula</p>
+      </div>
+
+    </div>
+
+    <!-- GRID: Table + Form -->
+    <div style="display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start;">
+
+      <!-- TRANSACTIONS -->
+      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:20px;overflow:hidden;">
+        <div style="padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <h3 style="font-size:0.95rem;font-weight:800;">Riwayat Transaksi Dafi</h3>
+            <p style="font-size:0.7rem;color:rgba(255,255,255,0.35);margin-top:2px;">Aktivitas jajan hari ini</p>
+          </div>
+          <button style="background:rgba(255,214,10,0.1);border:1px solid rgba(255,214,10,0.2);color:var(--yellow);font-size:0.7rem;font-weight:700;padding:6px 14px;border-radius:10px;cursor:pointer;font-family:inherit;">
+            Export CSV
+          </button>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Merchant</th>
+                <th>Waktu</th>
+                <th>Metode</th>
+                <th style="text-align:right;">Jumlah</th>
+                <th style="text-align:center;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="icon-box" style="background:rgba(255,107,53,0.15);font-size:1rem;">🍱</div>
+                    <div>
+                      <p style="font-weight:700;font-size:0.82rem;">Kantin Bu Yati</p>
+                      <p style="font-size:0.65rem;color:rgba(255,255,255,0.35);">SDN 01 Pasuruan</p>
+                    </div>
+                  </div>
+                </td>
+                <td style="color:rgba(255,255,255,0.4);font-size:0.76rem;">08:35 WIB</td>
+                <td><span style="font-size:0.7rem;color:rgba(255,255,255,0.5);">QRIS</span></td>
+                <td style="text-align:right;font-weight:800;color:#f87171;">−Rp10.000</td>
+                <td style="text-align:center;"><span class="badge badge-success">Sukses</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="icon-box" style="background:rgba(6,214,160,0.1);font-size:1rem;">🥛</div>
+                    <div>
+                      <p style="font-weight:700;font-size:0.82rem;">Beli Susu</p>
+                      <p style="font-size:0.65rem;color:rgba(255,255,255,0.35);">Koperasi Sekolah</p>
+                    </div>
+                  </div>
+                </td>
+                <td style="color:rgba(255,255,255,0.4);font-size:0.76rem;">10:12 WIB</td>
+                <td><span style="font-size:0.7rem;color:rgba(255,255,255,0.5);">QRIS</span></td>
+                <td style="text-align:right;font-weight:800;color:#f87171;">−Rp5.000</td>
+                <td style="text-align:center;"><span class="badge badge-success">Sukses</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="icon-box" style="background:rgba(255,214,10,0.1);font-size:1rem;">🍭</div>
+                    <div>
+                      <p style="font-weight:700;font-size:0.82rem;">Permen & Minuman</p>
+                      <p style="font-size:0.65rem;color:rgba(255,255,255,0.35);">Warung Pak Slamet</p>
+                    </div>
+                  </div>
+                </td>
+                <td style="color:rgba(255,255,255,0.4);font-size:0.76rem;">12:48 WIB</td>
+                <td><span style="font-size:0.7rem;color:rgba(255,255,255,0.5);">QRIS</span></td>
+                <td style="text-align:right;font-weight:800;color:#f87171;">−Rp3.000</td>
+                <td style="text-align:center;"><span class="badge badge-warn">Pending</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="icon-box" style="background:rgba(123,47,190,0.15);font-size:1rem;">💵</div>
+                    <div>
+                      <p style="font-weight:700;font-size:0.82rem;">Top Up Saldo</p>
+                      <p style="font-size:0.65rem;color:rgba(255,255,255,0.35);">Transfer dari Ayah</p>
+                    </div>
+                  </div>
+                </td>
+                <td style="color:rgba(255,255,255,0.4);font-size:0.76rem;">07:00 WIB</td>
+                <td><span style="font-size:0.7rem;color:rgba(255,255,255,0.5);">Transfer</span></td>
+                <td style="text-align:right;font-weight:800;color:var(--green);">+Rp20.000</td>
+                <td style="text-align:center;"><span class="badge badge-success">Sukses</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);">4 dari 12 transaksi</p>
+          <button style="background:transparent;border:none;color:var(--yellow);font-size:0.75rem;font-weight:700;cursor:pointer;font-family:inherit;">Lihat Semua →</button>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- LIMIT FORM -->
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:22px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+            <div class="icon-box" style="background:rgba(255,214,10,0.12);font-size:1.1rem;">🎯</div>
+            <div>
+              <h3 style="font-size:0.9rem;font-weight:800;">Atur Limit Jajan Harian</h3>
+              <p style="font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:1px;">Batasi pengeluaran anak per hari</p>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div>
+              <label class="form-label">Nama Anak</label>
+              <select class="form-input" style="appearance:none;">
+                <option style="background:#1B2D5B;">🎒 Dafi Pratama — Kelas 5A</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="form-label">Jumlah Limit (Rp)</label>
+              <div style="position:relative;">
+                <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.35);font-size:0.82rem;font-weight:700;">Rp</span>
+                <input type="number" id="limitInput" placeholder="Contoh: 20000" class="form-input" style="padding-left:38px;"/>
+              </div>
+            </div>
+
+            <div>
+              <label class="form-label">Berlaku Untuk</label>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <label style="display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid rgba(255,214,10,0.35);background:rgba(255,214,10,0.08);border-radius:11px;padding:9px;cursor:pointer;font-size:0.75rem;font-weight:700;color:var(--yellow);">
+                  <input type="radio" name="lt" value="daily" checked style="accent-color:var(--yellow);"/> Harian
+                </label>
+                <label style="display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--border);border-radius:11px;padding:9px;cursor:pointer;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.4);">
+                  <input type="radio" name="lt" value="weekly" style="accent-color:var(--yellow);"/> Mingguan
+                </label>
+              </div>
+            </div>
+
+            <button class="btn-primary" onclick="saveLimit()">💾 Simpan Limit</button>
+          </div>
+        </div>
+
+        <!-- ALERT WIDGET -->
+        <div style="background:linear-gradient(135deg,rgba(255,214,10,0.1),rgba(255,107,53,0.08));border:1px solid rgba(255,214,10,0.2);border-radius:18px;padding:18px;">
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <span style="font-size:1.4rem;">⚠️</span>
+            <div>
+              <p style="font-size:0.82rem;font-weight:800;color:var(--yellow);margin-bottom:4px;">Peringatan Limit!</p>
+              <p style="font-size:0.75rem;color:rgba(255,255,255,0.6);line-height:1.5;">Dafi sudah memakai <strong style="color:#fff;">75%</strong> dari limit harian. Pertimbangkan menaikkan limit hari ini.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- MISI ANAK -->
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:18px;padding:18px;">
+          <p style="font-size:0.7rem;font-weight:800;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;">🎮 Misi Aktif Dafi</p>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <div style="background:rgba(6,214,160,0.08);border:1px solid rgba(6,214,160,0.15);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
+              <span style="font-size:1rem;">🥗</span>
+              <div style="flex:1;min-width:0;">
+                <p style="font-size:0.75rem;font-weight:700;">Beli makanan sehat 3x</p>
+                <div class="progress-track" style="margin-top:5px;">
+                  <div class="progress-fill" style="width:66%;background:var(--green);"></div>
+                </div>
+              </div>
+              <span style="font-size:0.65rem;font-weight:800;color:var(--green);">2/3</span>
+            </div>
+            <div style="background:rgba(255,214,10,0.06);border:1px solid rgba(255,214,10,0.12);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
+              <span style="font-size:1rem;">🐷</span>
+              <div style="flex:1;min-width:0;">
+                <p style="font-size:0.75rem;font-weight:700;">Nabung Rp10.000 minggu ini</p>
+                <div class="progress-track" style="margin-top:5px;">
+                  <div class="progress-fill" style="width:40%;background:var(--yellow);"></div>
+                </div>
+              </div>
+              <span style="font-size:0.65rem;font-weight:800;color:var(--yellow);">40%</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function saveLimit() {
+    const input = document.getElementById('limitInput');
+    const val = parseInt(input.value);
+    if (!input.value || isNaN(val) || val <= 0) {
+      alert('⚠️ Masukkan jumlah limit yang valid!');
+      return;
+    }
+    const fmt = new Intl.NumberFormat('id-ID').format(val);
+    alert(`✅ Limit harian berhasil diatur sebesar Rp${fmt}!`);
+    input.value = '';
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    const overlay = document.getElementById('overlay');
+    overlay.style.display = overlay.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // Show hamburger on small screens
+  function checkWidth() {
+    document.getElementById('menuBtn').style.display = window.innerWidth < 768 ? 'block' : 'none';
+  }
+  checkWidth();
+  window.addEventListener('resize', checkWidth);
+</script>
+</body>
+</html>
