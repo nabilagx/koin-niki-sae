@@ -7,538 +7,650 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --yellow: #FFD60A;
-      --orange: #FF6B35;
-      --green:  #06D6A0;
-      --pink:   #FF4D8D;
-      --navy:   #0F1E3D;
-      --bg:     #FFF8ED;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: linear-gradient(145deg, #FF6B35 0%, #FF4D8D 45%, #7B2FBE 100%);
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
-    }
-    .fredoka { font-family: 'Fredoka One', cursive; }
+    :root{ --y:#FFD60A;--o:#FF6B35;--g:#06D6A0;--p:#FF4D8D;--n:#0F1E3D;--bg:#FFF8ED;--purple:#7B2FBE; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145deg,#FF6B35 0%,#FF4D8D 45%,#7B2FBE 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+    .fredoka{font-family:'Fredoka One',cursive;}
 
-    /* ——— PHONE SHELL ——— */
-    .phone {
-      width: 375px;
-      height: 812px;
-      background: var(--bg);
-      border-radius: 52px;
-      box-shadow:
-        0 0 0 2px rgba(255,255,255,0.3),
-        0 0 0 11px #1a1a2e,
-        0 0 0 13px rgba(255,255,255,0.1),
-        0 50px 100px rgba(0,0,0,0.55);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+    /* PHONE */
+    .phone{width:375px;height:812px;background:var(--bg);border-radius:52px;box-shadow:0 0 0 2px rgba(255,255,255,0.25),0 0 0 11px #1a1a2e,0 0 0 13px rgba(255,255,255,0.08),0 50px 100px rgba(0,0,0,0.55);position:relative;overflow:hidden;display:flex;flex-direction:column;}
+    .status-bar{height:44px;background:var(--n);flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;}
+    .dyn-island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:20px;z-index:60;}
+    .app-header{background:var(--n);padding:12px 22px 30px;flex-shrink:0;position:relative;}
+    .app-header::after{content:'';position:absolute;bottom:-22px;left:0;right:0;height:44px;background:var(--n);border-radius:0 0 50% 50% / 0 0 44px 44px;}
+    .phone-body{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;z-index:1;}
+    .phone-body::-webkit-scrollbar{display:none;}
+    .tab-page{display:none;padding:32px 18px 100px;animation:fadeUp .22s ease;}
+    .tab-page.active{display:block;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+    .bottom-nav{position:absolute;bottom:0;left:0;right:0;height:80px;background:#fff;border-top:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:space-around;padding-bottom:10px;box-shadow:0 -6px 24px rgba(0,0,0,0.07);z-index:30;}
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 12px;border-radius:14px;transition:background .15s;}
+    .nav-item:hover{background:rgba(0,0,0,0.04);}
+    .nav-dot{width:5px;height:5px;background:var(--o);border-radius:50%;margin-top:1px;}
 
-    /* Status bar */
-    .status-bar {
-      height: 44px; background: var(--navy); flex-shrink: 0;
-      display: flex; align-items: flex-end; justify-content: space-between;
-      padding: 0 28px 8px;
-    }
-    /* Dynamic island */
-    .dynamic-island {
-      position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-      width: 120px; height: 34px;
-      background: #000; border-radius: 20px; z-index: 50;
-    }
+    /* BALANCE CARD */
+    .bal-card{background:linear-gradient(140deg,var(--o) 0%,var(--p) 100%);border-radius:24px;padding:20px;position:relative;overflow:hidden;box-shadow:0 12px 36px rgba(255,107,53,0.38);margin-bottom:20px;}
+    .bal-card::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:rgba(255,255,255,0.1);border-radius:50%;}
+    .bal-card::after{content:'';position:absolute;bottom:-30px;left:20px;width:100px;height:100px;background:rgba(255,255,255,0.07);border-radius:50%;}
+    .pt{background:rgba(255,255,255,0.22);border-radius:999px;height:6px;overflow:hidden;}
+    .pf{height:100%;border-radius:999px;transition:width .8s cubic-bezier(.34,1,.64,1);}
 
-    /* Top header curve */
-    .app-header {
-      background: var(--navy);
-      padding: 12px 22px 30px;
-      flex-shrink: 0;
-      position: relative;
-    }
-    .app-header::after {
-      content: '';
-      position: absolute;
-      bottom: -22px; left: 0; right: 0;
-      height: 44px;
-      background: var(--navy);
-      border-radius: 0 0 50% 50% / 0 0 44px 44px;
-    }
+    /* SCAN BTN */
+    .scan-orbit{position:relative;width:130px;height:130px;display:flex;align-items:center;justify-content:center;}
+    .orbit-ring{position:absolute;border-radius:50%;border:2px solid rgba(255,107,53,0.22);animation:orbitExp 2s ease-out infinite;}
+    .orbit-ring:nth-child(2){animation-delay:.66s;border-color:rgba(255,77,141,0.18);}
+    .orbit-ring:nth-child(3){animation-delay:1.32s;border-color:rgba(123,47,190,0.14);}
+    @keyframes orbitExp{0%{width:82px;height:82px;opacity:1;}100%{width:150px;height:150px;opacity:0;}}
+    .scan-btn{width:92px;height:92px;border-radius:50%;background:linear-gradient(140deg,var(--o),var(--p));display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:none;box-shadow:0 10px 30px rgba(255,107,53,0.48);position:relative;z-index:2;transition:transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s;font-family:inherit;}
+    .scan-btn:hover{transform:scale(1.1);box-shadow:0 16px 40px rgba(255,107,53,0.62);}
+    .scan-btn:active{transform:scale(.91);}
 
-    /* Scrollable body */
-    .phone-body {
-      flex: 1; overflow-y: auto; overflow-x: hidden;
-      padding: 32px 18px 100px;
-      position: relative; z-index: 1;
-    }
-    .phone-body::-webkit-scrollbar { display: none; }
+    /* CAMERA SCANNER */
+    #camOverlay{position:absolute;inset:0;background:#000;z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;border-radius:52px;}
+    #camOverlay.show{display:flex;}
 
-    /* Bottom nav */
-    .bottom-nav {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 80px;
-      background: #fff;
-      border-top: 1px solid rgba(0,0,0,0.06);
-      display: flex; align-items: center; justify-content: space-around;
-      padding-bottom: 10px;
-      box-shadow: 0 -8px 30px rgba(0,0,0,0.08);
-      z-index: 20;
-    }
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 3px; cursor: pointer; padding: 4px 10px;
-      border-radius: 14px; transition: background 0.15s;
-    }
-    .nav-item:hover { background: rgba(0,0,0,0.04); }
-    .nav-item.active .nav-dot {
-      width: 5px; height: 5px; background: var(--orange);
-      border-radius: 50%; margin-top: 2px;
-    }
+    /* Fake camera feed */
+    .cam-feed{position:absolute;inset:0;border-radius:52px;overflow:hidden;}
+    .cam-pixel{position:absolute;border-radius:2px;animation:camFlicker linear infinite;}
+    @keyframes camFlicker{0%,100%{opacity:.5;}50%{opacity:1;}}
 
-    /* ——— BALANCE CARD ——— */
-    .balance-card {
-      background: linear-gradient(140deg, #FF6B35 0%, #FF4D8D 100%);
-      border-radius: 24px;
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 12px 36px rgba(255,107,53,0.4);
-      margin-bottom: 20px;
-    }
-    .balance-card::before {
-      content: '';
-      position: absolute; top: -40px; right: -40px;
-      width: 150px; height: 150px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 50%;
-    }
-    .balance-card::after {
-      content: '';
-      position: absolute; bottom: -30px; left: 20px;
-      width: 100px; height: 100px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 50%;
-    }
+    /* QR frame */
+    .qr-frame{position:relative;width:224px;height:224px;display:flex;align-items:center;justify-content:center;z-index:2;}
+    .qrc{position:absolute;width:38px;height:38px;}
+    .qrc.tl{top:0;left:0;border-top:4px solid var(--g);border-left:4px solid var(--g);border-radius:6px 0 0 0;}
+    .qrc.tr{top:0;right:0;border-top:4px solid var(--g);border-right:4px solid var(--g);border-radius:0 6px 0 0;}
+    .qrc.bl{bottom:0;left:0;border-bottom:4px solid var(--g);border-left:4px solid var(--g);border-radius:0 0 0 6px;}
+    .qrc.br{bottom:0;right:0;border-bottom:4px solid var(--g);border-right:4px solid var(--g);border-radius:0 0 6px 0;}
+    .laser{width:194px;height:2px;background:linear-gradient(90deg,transparent,var(--g),transparent);box-shadow:0 0 12px var(--g);animation:laserScan 1.5s ease-in-out infinite;}
+    @keyframes laserScan{0%{transform:translateY(-92px);opacity:1;}100%{transform:translateY(92px);opacity:.6;}}
 
-    /* SCAN BUTTON */
-    .scan-wrap {
-      display: flex; flex-direction: column; align-items: center;
-      margin-bottom: 22px;
-    }
-    .scan-orbit {
-      position: relative; width: 130px; height: 130px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .orbit-ring {
-      position: absolute; border-radius: 50%;
-      border: 2px solid rgba(255,107,53,0.25);
-      animation: orbitExpand 2s ease-out infinite;
-    }
-    .orbit-ring:nth-child(2) { animation-delay: 0.66s; border-color: rgba(255,77,141,0.2); }
-    .orbit-ring:nth-child(3) { animation-delay: 1.32s; border-color: rgba(123,47,190,0.15); }
-    @keyframes orbitExpand {
-      0%   { width: 80px; height: 80px; opacity: 1; }
-      100% { width: 140px; height: 140px; opacity: 0; }
-    }
-    .scan-btn {
-      width: 90px; height: 90px; border-radius: 50%;
-      background: linear-gradient(140deg, var(--orange), var(--pink));
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      cursor: pointer; border: none;
-      box-shadow: 0 10px 30px rgba(255,107,53,0.5);
-      position: relative; z-index: 2;
-      transition: transform 0.15s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-    .scan-btn:hover { transform: scale(1.1); box-shadow: 0 16px 40px rgba(255,107,53,0.65); }
-    .scan-btn:active { transform: scale(0.92); }
+    /* QR code grid (fake QR) */
+    .fake-qr{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:10px;background:#fff;border-radius:8px;opacity:0;transition:opacity .4s;position:absolute;}
+    .fake-qr.show{opacity:1;}
+    .qr-cell{width:18px;height:18px;border-radius:2px;}
 
-    /* MISSION CARDS */
-    .mission-card {
-      background: #fff;
-      border-radius: 18px;
-      padding: 14px;
-      display: flex; align-items: center; gap: 12px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.07);
-      margin-bottom: 10px;
-      transition: transform 0.15s;
-    }
-    .mission-card:hover { transform: translateX(4px); }
-    .mission-icon {
-      width: 44px; height: 44px; border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; flex-shrink: 0;
-    }
+    /* Detected flash */
+    .detect-flash{position:absolute;inset:0;background:rgba(6,214,160,0.18);border-radius:52px;opacity:0;z-index:3;pointer-events:none;}
+    @keyframes flashGreen{0%{opacity:0;}30%{opacity:1;}100%{opacity:0;}}
 
-    /* TRANSACTION LIST */
-    .tx-item {
-      background: #fff; border-radius: 16px; padding: 12px 14px;
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .tx-icon {
-      width: 40px; height: 40px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; flex-shrink: 0;
-    }
+    /* Payment receipt overlay */
+    #receiptOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:110;display:none;align-items:center;justify-content:center;border-radius:52px;}
+    #receiptOverlay.show{display:flex;}
+    .receipt-card{background:#fff;border-radius:24px;padding:28px 24px;width:300px;text-align:center;animation:receiptPop .35s cubic-bezier(.34,1.56,.64,1);}
+    @keyframes receiptPop{from{transform:scale(.7);opacity:0;}to{transform:scale(1);opacity:1;}}
 
-    /* XP BAR */
-    .xp-track {
-      background: rgba(255,255,255,0.25); border-radius: 999px; height: 6px;
-    }
-    .xp-fill {
-      background: var(--yellow); height: 100%; border-radius: 999px;
-      box-shadow: 0 0 8px rgba(255,214,10,0.8);
-      transition: width 1s cubic-bezier(.34,1,.64,1);
-    }
+    /* TOAST (inside phone) */
+    #phoneToast{position:absolute;top:56px;left:14px;right:14px;z-index:200;pointer-events:none;}
+    .p-toast{background:rgba(15,30,61,0.96);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;border-left:4px solid var(--g);box-shadow:0 8px 24px rgba(0,0,0,0.35);transform:translateY(-20px) scale(.95);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:all;}
+    .p-toast.show{transform:translateY(0) scale(1);opacity:1;}
 
-    /* CAMERA OVERLAY */
-    #camOverlay {
-      position: absolute; inset: 0;
-      background: #000;
-      z-index: 100;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-radius: 52px;
-    }
-    #camOverlay.show { display: flex; }
-    .qr-frame {
-      width: 220px; height: 220px;
-      position: relative;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .qr-corner {
-      position: absolute;
-      width: 36px; height: 36px;
-    }
-    .qr-corner.tl { top: 0; left: 0; border-top: 4px solid var(--green); border-left: 4px solid var(--green); border-radius: 6px 0 0 0; }
-    .qr-corner.tr { top: 0; right: 0; border-top: 4px solid var(--green); border-right: 4px solid var(--green); border-radius: 0 6px 0 0; }
-    .qr-corner.bl { bottom: 0; left: 0; border-bottom: 4px solid var(--green); border-left: 4px solid var(--green); border-radius: 0 0 0 6px; }
-    .qr-corner.br { bottom: 0; right: 0; border-bottom: 4px solid var(--green); border-right: 4px solid var(--green); border-radius: 0 0 6px 0; }
-    .scan-laser {
-      width: 190px; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--green), transparent);
-      box-shadow: 0 0 10px var(--green);
-      animation: laserScan 1.6s ease-in-out infinite;
-    }
-    @keyframes laserScan {
-      0%   { transform: translateY(-90px); opacity: 1; }
-      100% { transform: translateY(90px);  opacity: 0.6; }
-    }
+    /* XP bar */
+    .xp-track{background:rgba(255,255,255,0.22);border-radius:999px;height:6px;}
+    .xp-fill{background:var(--y);height:100%;border-radius:999px;box-shadow:0 0 8px rgba(255,214,10,0.7);transition:width 1s cubic-bezier(.34,1,.64,1);}
 
-    /* COIN POP ANIMATION */
-    .coin-pop {
-      position: absolute; pointer-events: none; z-index: 200;
-      animation: coinPop 1s ease-out forwards;
-      font-size: 1.5rem;
-    }
-    @keyframes coinPop {
-      0%   { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-80px) scale(0.3); opacity: 0; }
-    }
+    /* Coin pop */
+    .coin-pop{position:absolute;pointer-events:none;z-index:210;animation:coinPop .9s ease-out forwards;font-size:1.4rem;}
+    @keyframes coinPop{0%{transform:translateY(0) scale(1);opacity:1;}100%{transform:translateY(-90px) scale(.2);opacity:0;}}
+
+    /* Mission card */
+    .mission-card{background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 12px rgba(0,0,0,0.07);margin-bottom:10px;transition:transform .15s;}
+    .mission-card:active{transform:scale(.98);}
+    .m-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0;}
+
+    /* History item */
+    .hist-item{background:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+    .h-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+
+    /* Profile stat */
+    .prof-stat{background:#fff;border-radius:16px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+
+    /* Tour inside phone */
+    #phoneToasts{position:absolute;top:60px;left:12px;right:12px;z-index:250;pointer-events:none;display:flex;flex-direction:column;gap:8px;}
 
     /* Section label */
-    .section-label {
-      font-size: 0.7rem; font-weight: 800;
-      color: rgba(0,0,0,0.3); text-transform: uppercase;
-      letter-spacing: 0.1em; margin-bottom: 10px; margin-top: 4px;
-    }
+    .sec-lbl{font-size:0.68rem;font-weight:800;color:rgba(0,0,0,0.28);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;margin-top:4px;}
 
-    @keyframes limitShake {
-      0%,100% { transform: scale(1); }
-      25%      { transform: scale(1.1) rotate(-2deg); }
-      75%      { transform: scale(1.1) rotate(2deg); }
-    }
-    .shake-anim { animation: limitShake 0.4s ease; }
+    /* Tour card (phone) */
+    #phoneTourCard{position:absolute;z-index:300;left:14px;right:14px;background:linear-gradient(135deg,#1e3060,#162444);border:1px solid rgba(255,214,10,0.35);border-radius:20px;padding:16px 18px;box-shadow:0 20px 50px rgba(0,0,0,0.6);transform:scale(.9);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
+    #phoneTourCard.show{transform:scale(1);opacity:1;}
+    #phoneOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.65);z-index:290;border-radius:52px;display:none;}
 
-    /* Desktop label */
-    .desktop-hint {
-      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-      color: rgba(255,255,255,0.35); font-size: 0.68rem; font-weight: 600;
-      letter-spacing: 0.1em; text-transform: uppercase; z-index: 0;
-      white-space: nowrap;
-    }
-    @media (max-width: 400px) {
-      body { align-items: flex-start; }
-      .phone { width: 100vw; height: 100vh; border-radius: 0; box-shadow: none; }
-      .dynamic-island { display: none; }
-      .desktop-hint { display: none; }
+    @media(max-width:400px){
+      body{align-items:flex-start;background:var(--bg);}
+      .phone{width:100vw;height:100vh;border-radius:0;box-shadow:none;}
+      .dyn-island{display:none;}
     }
   </style>
 </head>
 <body>
+<p style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.28);font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;z-index:0;pointer-events:none;">Tampilan Aplikasi Anak · KOIN Prototype</p>
 
-<p class="desktop-hint">Tampilan Aplikasi Anak · KOIN Prototype</p>
-
-<!-- ——— PHONE ——— -->
 <div class="phone" id="phoneRoot">
 
-  <!-- Dynamic island -->
-  <div class="dynamic-island"></div>
+  <!-- ——— TOUR OVERLAY ——— -->
+  <div id="phoneOverlay"></div>
+  <div id="phoneTourCard">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span id="ptIcon" style="font-size:1.2rem;">👋</span>
+      <span class="fredoka" id="ptTitle" style="color:var(--y);font-size:0.95rem;"></span>
+      <button onclick="endPhoneTour()" style="margin-left:auto;background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.38);border-radius:7px;padding:2px 8px;cursor:pointer;font-size:0.65rem;font-family:inherit;">Lewati</button>
+    </div>
+    <p id="ptBody" style="font-size:0.74rem;color:rgba(255,255,255,0.6);line-height:1.55;margin-bottom:12px;"></p>
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div id="ptDots" style="display:flex;gap:4px;"></div>
+      <button id="ptNext" onclick="phoneTourNext()" style="background:linear-gradient(135deg,var(--y),var(--o));border:none;color:#0F1E3D;border-radius:9px;padding:7px 14px;cursor:pointer;font-size:0.72rem;font-family:inherit;font-weight:800;">Lanjut →</button>
+    </div>
+  </div>
 
-  <!-- Camera overlay -->
+  <!-- dynamic island -->
+  <div class="dyn-island"></div>
+
+  <!-- CAMERA OVERLAY -->
   <div id="camOverlay">
-    <p style="color:rgba(255,255,255,0.4);font-size:0.65rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:30px;">KOIN QRIS Scanner</p>
-    <div class="qr-frame">
-      <div class="qr-corner tl"></div>
-      <div class="qr-corner tr"></div>
-      <div class="qr-corner bl"></div>
-      <div class="qr-corner br"></div>
-      <div class="scan-laser"></div>
+    <!-- Fake blurry camera background -->
+    <div class="cam-feed" id="camFeed"></div>
+    <!-- Dark center vignette -->
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.6) 100%);z-index:1;border-radius:52px;"></div>
+    <p style="color:rgba(255,255,255,0.5);font-size:0.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:24px;z-index:2;">KOIN QRIS Scanner</p>
+    <!-- QR frame -->
+    <div class="qr-frame" id="qrFrame">
+      <div class="qrc tl"></div><div class="qrc tr"></div><div class="qrc bl"></div><div class="qrc br"></div>
+      <!-- fake QR grid (hidden initially) -->
+      <div class="fake-qr" id="fakeQr" style="z-index:2;"></div>
+      <div class="laser" id="scanLaser"></div>
+      <div class="detect-flash" id="detectFlash"></div>
     </div>
-    <p id="camText" style="color:#fff;font-size:1rem;font-weight:800;margin-top:28px;font-family:'Fredoka One',cursive;">Membuka Kamera...</p>
-    <p style="color:rgba(255,255,255,0.35);font-size:0.72rem;margin-top:6px;">Arahkan ke kode QRIS</p>
+    <p id="camText" style="color:#fff;font-size:0.95rem;font-weight:800;margin-top:22px;font-family:'Fredoka One',cursive;z-index:2;letter-spacing:.04em;">Membuka Kamera...</p>
+    <p id="camSub"  style="color:rgba(255,255,255,0.4);font-size:0.68rem;margin-top:5px;z-index:2;font-weight:600;">Mendeteksi kode QRIS</p>
+    <!-- merchant info (shows when detected) -->
+    <div id="merchantInfo" style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:12px 20px;margin-top:16px;text-align:center;z-index:2;opacity:0;transition:opacity .4s;min-width:220px;">
+      <p style="color:rgba(255,255,255,0.55);font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">Merchant Terdeteksi</p>
+      <p style="color:#fff;font-size:0.95rem;font-weight:800;margin-top:4px;">🍱 Kantin Bu Yati</p>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.7rem;margin-top:2px;">SDN 01 Pasuruan · QRIS Verified</p>
+    </div>
+    <button id="cancelScanBtn" onclick="cancelScan()" style="margin-top:18px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.65);border-radius:12px;padding:9px 22px;cursor:pointer;font-size:0.75rem;font-weight:700;font-family:inherit;z-index:2;">✕ Batalkan</button>
   </div>
 
-  <!-- Status bar -->
+  <!-- Payment Receipt Overlay -->
+  <div id="receiptOverlay">
+    <div class="receipt-card">
+      <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--g),#22d3ee);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 14px;">✅</div>
+      <p class="fredoka" style="color:#111;font-size:1.3rem;margin-bottom:4px;">Pembayaran Sukses!</p>
+      <p style="color:rgba(0,0,0,0.4);font-size:0.75rem;margin-bottom:18px;">via QRIS · Kantin Bu Yati</p>
+      <div style="background:#f9fafb;border-radius:14px;padding:14px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">Jumlah Bayar</span><span style="font-size:0.78rem;font-weight:800;color:#ef4444;">−Rp10.000</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">Sisa Limit</span><span id="recSisa" style="font-size:0.78rem;font-weight:800;color:#111;">Rp10.000</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="font-size:0.78rem;color:rgba(0,0,0,0.45);">XP Diperoleh</span><span style="font-size:0.78rem;font-weight:800;color:var(--o);">+5 XP ⭐</span></div>
+      </div>
+      <button onclick="closeReceipt()" style="width:100%;background:linear-gradient(135deg,var(--o),var(--p));border:none;color:#fff;font-weight:800;font-size:0.88rem;padding:12px;border-radius:13px;cursor:pointer;font-family:inherit;">Oke, Makasih! 👍</button>
+    </div>
+  </div>
+
+  <!-- STATUS BAR -->
   <div class="status-bar">
-    <span style="color:rgba(255,255,255,0.7);font-size:0.7rem;font-weight:700;">09:41</span>
+    <span style="color:rgba(255,255,255,0.7);font-size:.68rem;font-weight:700;">09:41</span>
     <div style="display:flex;align-items:center;gap:5px;">
-      <svg width="14" height="11" fill="rgba(255,255,255,0.7)" viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
-      <svg width="14" height="11" fill="rgba(255,255,255,0.7)" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      <svg width="13" height="10" fill="rgba(255,255,255,0.65)" viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg width="13" height="10" fill="rgba(255,255,255,0.65)" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="14" rx="2"/><path d="M6 7H4a2 2 0 00-2 2v8a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2h-2"/></svg>
     </div>
   </div>
 
-  <!-- App header -->
-  <div class="app-header">
+  <!-- APP HEADER -->
+  <div class="app-header" id="appHeader">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-top:4px;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="background:linear-gradient(135deg,var(--yellow),var(--orange));border-radius:12px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 4px 12px rgba(255,107,53,0.4);">🪙</div>
-        <span class="fredoka" style="color:var(--yellow);font-size:1.4rem;">KOIN</span>
+      <div style="display:flex;align-items:center;gap:9px;">
+        <div style="background:linear-gradient(135deg,var(--y),var(--o));border-radius:11px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;box-shadow:0 4px 10px rgba(255,107,53,0.38);">🪙</div>
+        <span class="fredoka" style="color:var(--y);font-size:1.35rem;">KOIN</span>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div style="background:rgba(255,255,255,0.1);border-radius:10px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;">🔔</div>
-        <div style="background:linear-gradient(135deg,var(--orange),var(--pink));border-radius:12px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;color:#fff;">D</div>
+      <div style="display:flex;align-items:center;gap:7px;">
+        <div id="phoneNotifBtn" style="background:rgba(255,255,255,0.1);border-radius:10px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;position:relative;" onclick="showPhoneToast('🔔','Notifikasi','Limit hampir habis! Sisa Rp5.000','warn')">
+          🔔
+          <span style="position:absolute;top:-3px;right:-3px;background:var(--p);color:#fff;font-size:.48rem;padding:2px 4px;border-radius:999px;font-weight:800;">1</span>
+        </div>
+        <div style="background:linear-gradient(135deg,var(--o),var(--p));border-radius:11px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;color:#fff;">D</div>
       </div>
     </div>
-
-    <!-- Greeting + XP -->
     <div style="display:flex;justify-content:space-between;align-items:flex-end;">
-      <div>
-        <p style="color:rgba(255,255,255,0.55);font-size:0.72rem;font-weight:600;">Halo, 👋</p>
-        <p style="color:#fff;font-weight:800;font-size:1.05rem;margin-top:1px;">Dafi Pratama</p>
-      </div>
-      <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:6px 10px;text-align:right;">
-        <p class="fredoka" style="color:var(--yellow);font-size:0.9rem;line-height:1;">Lv.3 ⭐</p>
-        <div class="xp-track" style="width:72px;margin-top:4px;">
-          <div class="xp-fill" style="width:56%;"></div>
-        </div>
-        <p style="color:rgba(255,255,255,0.45);font-size:0.58rem;margin-top:2px;font-weight:700;">85 / 150 XP</p>
+      <div><p style="color:rgba(255,255,255,.5);font-size:.68rem;font-weight:600;">Halo 👋</p><p style="color:#fff;font-weight:800;font-size:1rem;margin-top:1px;">Dafi Pratama</p></div>
+      <div style="background:rgba(255,255,255,.1);border-radius:11px;padding:6px 10px;text-align:right;">
+        <p class="fredoka" style="color:var(--y);font-size:.88rem;line-height:1;">Lv.3 ⭐</p>
+        <div class="xp-track" style="width:70px;margin-top:3px;"><div class="xp-fill" style="width:56%;"></div></div>
+        <p style="color:rgba(255,255,255,.4);font-size:.56rem;margin-top:2px;font-weight:700;">85 / 150 XP</p>
       </div>
     </div>
   </div>
 
-  <!-- Scrollable body -->
+  <!-- PHONE BODY -->
   <div class="phone-body">
 
-    <!-- Balance card -->
-    <div class="balance-card">
-      <p style="color:rgba(255,255,255,0.7);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">💰 Sisa Limit Jajan Hari Ini</p>
-      <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:12px;position:relative;z-index:2;">
-        <span style="color:#fff;font-size:1.1rem;font-weight:800;">Rp</span>
-        <span id="limitDisplay" class="fredoka" style="color:#fff;font-size:2.8rem;line-height:1;text-shadow:0 4px 12px rgba(0,0,0,0.2);">20.000</span>
-      </div>
+    <!-- PHONE TOAST -->
+    <div id="phoneToastArea" style="position:sticky;top:0;left:0;right:0;z-index:200;padding:0 12px;pointer-events:none;"></div>
 
-      <!-- Progress -->
-      <div style="background:rgba(255,255,255,0.2);border-radius:999px;height:7px;overflow:hidden;position:relative;z-index:2;">
-        <div id="limitBar" style="height:100%;width:100%;background:rgba(255,255,255,0.9);border-radius:999px;transition:width 0.8s cubic-bezier(.34,1,.64,1);box-shadow:0 0 8px rgba(255,255,255,0.6);"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;margin-top:5px;position:relative;z-index:2;">
-        <span style="color:rgba(255,255,255,0.6);font-size:0.62rem;font-weight:700;">Terpakai: <span id="usedDisplay" style="color:#fff;">Rp0</span></span>
-        <span style="color:rgba(255,255,255,0.6);font-size:0.62rem;font-weight:700;">Limit: Rp20.000</span>
-      </div>
-    </div>
+    <!-- ===== TAB: BERANDA ===== -->
+    <div id="tab-beranda" class="tab-page active">
 
-    <!-- SCAN Button -->
-    <div class="scan-wrap">
-      <p style="color:rgba(0,0,0,0.35);font-size:0.72rem;font-weight:700;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.08em;">Ketuk untuk bayar</p>
-      <div class="scan-orbit">
-        <div class="orbit-ring"></div>
-        <div class="orbit-ring"></div>
-        <div class="orbit-ring"></div>
-        <button class="scan-btn" id="scanBtn" onclick="startScan()">
-          <span style="font-size:2rem;display:block;line-height:1;margin-bottom:2px;">📷</span>
-          <span class="fredoka" style="color:#fff;font-size:0.95rem;letter-spacing:0.05em;line-height:1;">SCAN</span>
-          <span class="fredoka" style="color:#fff;font-size:0.95rem;letter-spacing:0.05em;line-height:1;">QRIS</span>
-        </button>
-      </div>
-      <p style="color:rgba(0,0,0,0.25);font-size:0.65rem;font-weight:600;margin-top:10px;">Bayar di kantin, koperasi & warung</p>
-    </div>
-
-    <!-- Quick actions -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px;">
-      <div style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,0.05);cursor:pointer;">
-        <span style="font-size:1.4rem;">🐷</span>
-        <span style="font-size:0.62rem;font-weight:800;color:rgba(0,0,0,0.5);text-align:center;">Nabung</span>
-      </div>
-      <div style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,0.05);cursor:pointer;">
-        <span style="font-size:1.4rem;">🎁</span>
-        <span style="font-size:0.62rem;font-weight:800;color:rgba(0,0,0,0.5);text-align:center;">Hadiah</span>
-      </div>
-      <div style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,0.05);cursor:pointer;">
-        <span style="font-size:1.4rem;">🗺️</span>
-        <span style="font-size:0.62rem;font-weight:800;color:rgba(0,0,0,0.5);text-align:center;">Misi</span>
-      </div>
-      <div style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,0.05);cursor:pointer;">
-        <span style="font-size:1.4rem;">📊</span>
-        <span style="font-size:0.62rem;font-weight:800;color:rgba(0,0,0,0.5);text-align:center;">Laporan</span>
-      </div>
-    </div>
-
-    <!-- Active missions -->
-    <p class="section-label">🎮 Misi Aktif</p>
-
-    <div class="mission-card">
-      <div class="mission-icon" style="background:#dcfce7;">🥗</div>
-      <div style="flex:1;min-width:0;">
-        <p style="font-size:0.8rem;font-weight:800;color:#111;">Beli makanan sehat 3x</p>
-        <div style="background:#f0fdf4;border-radius:999px;height:5px;margin-top:6px;overflow:hidden;">
-          <div style="width:66%;height:100%;background:var(--green);border-radius:999px;"></div>
+      <!-- Balance card -->
+      <div class="bal-card" id="balCard">
+        <p style="color:rgba(255,255,255,.68);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;position:relative;z-index:2;">💰 Sisa Limit Jajan Hari Ini</p>
+        <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:10px;position:relative;z-index:2;">
+          <span style="color:#fff;font-size:1.05rem;font-weight:800;">Rp</span>
+          <span id="limitDisp" class="fredoka" style="color:#fff;font-size:2.8rem;line-height:1;text-shadow:0 4px 12px rgba(0,0,0,0.2);">20.000</span>
         </div>
-        <p style="font-size:0.62rem;color:rgba(0,0,0,0.35);margin-top:3px;font-weight:600;">2 dari 3 selesai</p>
-      </div>
-      <div style="background:#f0fdf4;border-radius:10px;padding:4px 8px;text-align:center;">
-        <p style="font-size:0.6rem;font-weight:800;color:var(--green);">+20XP</p>
-      </div>
-    </div>
-
-    <div class="mission-card">
-      <div class="mission-icon" style="background:#fef9c3;">🐷</div>
-      <div style="flex:1;min-width:0;">
-        <p style="font-size:0.8rem;font-weight:800;color:#111;">Nabung Rp5.000 hari ini</p>
-        <div style="background:#fefce8;border-radius:999px;height:5px;margin-top:6px;overflow:hidden;">
-          <div style="width:0%;height:100%;background:var(--yellow);border-radius:999px;"></div>
+        <div style="position:relative;z-index:2;">
+          <div class="pt"><div id="limitBar" class="pf" style="width:100%;background:rgba(255,255,255,0.88);"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+            <span style="color:rgba(255,255,255,.55);font-size:.6rem;font-weight:700;">Terpakai: <span id="usedDisp" style="color:#fff;">Rp0</span></span>
+            <span style="color:rgba(255,255,255,.55);font-size:.6rem;font-weight:700;">Limit: Rp20.000</span>
+          </div>
         </div>
-        <p style="font-size:0.62rem;color:rgba(0,0,0,0.35);margin-top:3px;font-weight:600;">Belum dimulai</p>
       </div>
-      <div style="background:#fefce8;border-radius:10px;padding:4px 8px;text-align:center;">
-        <p style="font-size:0.6rem;font-weight:800;color:#ca8a04;">+15XP</p>
+
+      <!-- SCAN -->
+      <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:22px;">
+        <p style="color:rgba(0,0,0,.3);font-size:.68rem;font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em;">Ketuk untuk bayar</p>
+        <div class="scan-orbit" id="scanArea">
+          <div class="orbit-ring"></div><div class="orbit-ring"></div><div class="orbit-ring"></div>
+          <button class="scan-btn" id="scanBtn" onclick="startScan()">
+            <span style="font-size:2rem;line-height:1;margin-bottom:1px;">📷</span>
+            <span class="fredoka" style="color:#fff;font-size:.9rem;line-height:1;">SCAN</span>
+            <span class="fredoka" style="color:#fff;font-size:.9rem;line-height:1;">QRIS</span>
+          </button>
+        </div>
+        <p style="color:rgba(0,0,0,.22);font-size:.62rem;font-weight:600;margin-top:8px;">Kantin · Koperasi · Warung</p>
+      </div>
+
+      <!-- Quick actions -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px;">
+        <div onclick="switchTab('misi')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s;" onmousedown="this.style.transform='scale(.95)'" onmouseup="this.style.transform=''"><span style="font-size:1.3rem;">🗺️</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Misi</span></div>
+        <div onclick="switchTab('tabungan')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s;" onmousedown="this.style.transform='scale(.95)'" onmouseup="this.style.transform=''"><span style="font-size:1.3rem;">🐷</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Nabung</span></div>
+        <div onclick="switchTab('riwayat')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s;" onmousedown="this.style.transform='scale(.95)'" onmouseup="this.style.transform=''"><span style="font-size:1.3rem;">📋</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Riwayat</span></div>
+        <div onclick="switchTab('profil')" style="background:#fff;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s;" onmousedown="this.style.transform='scale(.95)'" onmouseup="this.style.transform=''"><span style="font-size:1.3rem;">👤</span><span style="font-size:.6rem;font-weight:800;color:rgba(0,0,0,.45);">Profil</span></div>
+      </div>
+
+      <!-- Active missions preview -->
+      <p class="sec-lbl">🎮 Misi Aktif</p>
+      <div class="mission-card" onclick="switchTab('misi')">
+        <div class="m-icon" style="background:#dcfce7;">🥗</div>
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:.78rem;font-weight:800;color:#111;">Beli makanan sehat 3x</p>
+          <div style="background:#f0fdf4;border-radius:999px;height:5px;margin-top:5px;overflow:hidden;"><div style="width:66%;height:100%;background:var(--g);border-radius:999px;"></div></div>
+          <p style="font-size:.6rem;color:rgba(0,0,0,.32);margin-top:2px;font-weight:600;">2/3 · Hampir selesai!</p>
+        </div>
+        <div style="background:#f0fdf4;border-radius:9px;padding:4px 7px;text-align:center;"><p style="font-size:.58rem;font-weight:800;color:var(--g);">+20XP</p></div>
+      </div>
+      <div class="mission-card">
+        <div class="m-icon" style="background:#fef9c3;">🐷</div>
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:.78rem;font-weight:800;color:#111;">Nabung Rp5.000 hari ini</p>
+          <div style="background:#fefce8;border-radius:999px;height:5px;margin-top:5px;overflow:hidden;"><div style="width:0%;height:100%;background:var(--y);border-radius:999px;"></div></div>
+          <p style="font-size:.6rem;color:rgba(0,0,0,.32);margin-top:2px;font-weight:600;">Belum dimulai</p>
+        </div>
+        <div style="background:#fefce8;border-radius:9px;padding:4px 7px;"><p style="font-size:.58rem;font-weight:800;color:#ca8a04;">+15XP</p></div>
+      </div>
+
+      <!-- Recent tx -->
+      <p class="sec-lbl" style="margin-top:14px;">🧾 Terbaru</p>
+      <div class="hist-item"><div class="h-icon" style="background:#fff7ed;">🍱</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Kantin Bu Yati</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">08:35 · QRIS</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp10.000</span></div>
+      <div class="hist-item"><div class="h-icon" style="background:#f0fdf4;">🥛</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Beli Susu</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">10:12 · QRIS</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp5.000</span></div>
+    </div>
+
+    <!-- ===== TAB: RIWAYAT ===== -->
+    <div id="tab-riwayat" class="tab-page">
+      <p style="font-size:1rem;font-weight:800;color:#111;margin-bottom:4px;">Riwayat Transaksi 📋</p>
+      <p style="font-size:.72rem;color:rgba(0,0,0,.35);margin-bottom:16px;">Semua pengeluaran & pemasukan</p>
+      <!-- Filter pills -->
+      <div style="display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;">
+        <span onclick="filterHist(this,'semua')" class="hist-fil" style="background:var(--o);color:#fff;border-radius:99px;padding:5px 14px;font-size:.68rem;font-weight:800;white-space:nowrap;cursor:pointer;">Semua</span>
+        <span onclick="filterHist(this,'keluar')" class="hist-fil" style="background:#fff;color:rgba(0,0,0,.45);border-radius:99px;padding:5px 14px;font-size:.68rem;font-weight:800;white-space:nowrap;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.07);">Keluar</span>
+        <span onclick="filterHist(this,'masuk')" class="hist-fil" style="background:#fff;color:rgba(0,0,0,.45);border-radius:99px;padding:5px 14px;font-size:.68rem;font-weight:800;white-space:nowrap;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.07);">Masuk</span>
+      </div>
+      <div id="histList">
+        <p style="font-size:.62rem;font-weight:800;color:rgba(0,0,0,.25);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Hari Ini</p>
+        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#fff7ed;">🍱</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Kantin Bu Yati</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">08:35 · QRIS · SDN 01</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp10.000</span></div>
+        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#f0fdf4;">🥛</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Beli Susu</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">10:12 · QRIS · Koperasi</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp5.000</span></div>
+        <div class="hist-item" data-t="masuk"><div class="h-icon" style="background:#f5f3ff;">💵</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Top Up dari Ayah</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">07:00 · Transfer</p></div><span style="font-size:.78rem;font-weight:800;color:var(--g);">+Rp20.000</span></div>
+        <p style="font-size:.62rem;font-weight:800;color:rgba(0,0,0,.25);text-transform:uppercase;letter-spacing:.08em;margin:12px 0 8px;">Kemarin</p>
+        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#fff7ed;">🍜</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Mie Ayam Bu Ningsih</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">11:20 · QRIS</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp8.000</span></div>
+        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#eff6ff;">🧃</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Jus Alpukat</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">09:45 · QRIS</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp6.000</span></div>
+        <div class="hist-item" data-t="keluar"><div class="h-icon" style="background:#fdf4ff;">🍭</div><div style="flex:1;min-width:0;"><p style="font-size:.76rem;font-weight:800;color:#111;">Permen & Snack</p><p style="font-size:.6rem;color:rgba(0,0,0,.32);font-weight:600;">14:05 · QRIS</p></div><span style="font-size:.78rem;font-weight:800;color:#ef4444;">−Rp4.000</span></div>
       </div>
     </div>
 
-    <!-- Recent transactions -->
-    <p class="section-label" style="margin-top:14px;">🧾 Transaksi Hari Ini</p>
-
-    <div class="tx-item">
-      <div class="tx-icon" style="background:#fff7ed;"><span style="font-size:1.1rem;">🍱</span></div>
-      <div style="flex:1;min-width:0;">
-        <p style="font-size:0.78rem;font-weight:800;color:#111;">Kantin Bu Yati</p>
-        <p style="font-size:0.62rem;color:rgba(0,0,0,0.35);font-weight:600;">08:35 WIB · QRIS</p>
+    <!-- ===== TAB: MISI ===== -->
+    <div id="tab-misi" class="tab-page">
+      <p style="font-size:1rem;font-weight:800;color:#111;margin-bottom:4px;">Misi & Tantangan 🗺️</p>
+      <p style="font-size:.72rem;color:rgba(0,0,0,.35);margin-bottom:4px;">Selesaikan misi, kumpulkan XP, tukar hadiah!</p>
+      <!-- XP progress bar -->
+      <div style="background:linear-gradient(135deg,var(--o),var(--p));border-radius:18px;padding:14px 16px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span style="color:#fff;font-size:.75rem;font-weight:800;">Level 3 · Penabung Pemula</span><span class="fredoka" style="color:var(--y);font-size:1rem;">85/150 XP</span></div>
+        <div style="background:rgba(255,255,255,.22);border-radius:999px;height:8px;overflow:hidden;"><div style="width:57%;height:100%;background:#fff;border-radius:999px;box-shadow:0 0 8px rgba(255,255,255,.5);"></div></div>
+        <p style="color:rgba(255,255,255,.55);font-size:.6rem;margin-top:5px;font-weight:600;">65 XP lagi untuk naik Level 4 "Pejuang Hemat" 🎯</p>
       </div>
-      <span style="font-size:0.8rem;font-weight:800;color:#ef4444;">−Rp10.000</span>
+
+      <p class="sec-lbl">⚡ Misi Aktif</p>
+      <div class="mission-card">
+        <div class="m-icon" style="background:#dcfce7;">🥗</div>
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:.78rem;font-weight:800;color:#111;">Beli makanan sehat 3x</p>
+          <p style="font-size:.62rem;color:rgba(0,0,0,.35);margin-top:1px;">Pilih lauk bergizi di kantin sekolah</p>
+          <div style="background:#f0fdf4;border-radius:999px;height:5px;margin-top:6px;overflow:hidden;"><div style="width:66%;height:100%;background:var(--g);border-radius:999px;"></div></div>
+          <p style="font-size:.6rem;color:rgba(0,0,0,.3);margin-top:2px;font-weight:600;">2 dari 3 selesai</p>
+        </div>
+        <div style="text-align:center;"><div style="background:#f0fdf4;border-radius:10px;padding:5px 8px;"><p style="font-size:.62rem;font-weight:800;color:var(--g);">+20XP</p></div></div>
+      </div>
+      <div class="mission-card">
+        <div class="m-icon" style="background:#fef9c3;">🐷</div>
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:.78rem;font-weight:800;color:#111;">Nabung Rp5.000 hari ini</p>
+          <p style="font-size:.62rem;color:rgba(0,0,0,.35);margin-top:1px;">Sisihkan sebagian uang jajan ke tabungan</p>
+          <div style="background:#fefce8;border-radius:999px;height:5px;margin-top:6px;overflow:hidden;"><div style="width:0%;height:100%;background:var(--y);border-radius:999px;"></div></div>
+          <p style="font-size:.6rem;color:rgba(0,0,0,.3);margin-top:2px;font-weight:600;">Belum dimulai</p>
+        </div>
+        <div><div style="background:#fefce8;border-radius:10px;padding:5px 8px;"><p style="font-size:.62rem;font-weight:800;color:#ca8a04;">+15XP</p></div></div>
+      </div>
+      <div class="mission-card">
+        <div class="m-icon" style="background:#eff6ff;">⚡</div>
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:.78rem;font-weight:800;color:#111;">Jajan di bawah Rp15.000 hari ini</p>
+          <p style="font-size:.62rem;color:rgba(0,0,0,.35);margin-top:1px;">Hemat itu keren!</p>
+          <div style="background:#eff6ff;border-radius:999px;height:5px;margin-top:6px;overflow:hidden;"><div style="width:80%;height:100%;background:#60a5fa;border-radius:999px;"></div></div>
+          <p style="font-size:.6rem;color:rgba(0,0,0,.3);margin-top:2px;font-weight:600;">Rp12.000 dari Rp15.000</p>
+        </div>
+        <div><div style="background:#eff6ff;border-radius:10px;padding:5px 8px;"><p style="font-size:.62rem;font-weight:800;color:#2563eb;">+25XP</p></div></div>
+      </div>
+
+      <p class="sec-lbl" style="margin-top:14px;">🏆 Misi Selesai</p>
+      <div class="mission-card" style="opacity:.6;">
+        <div class="m-icon" style="background:#f0fdf4;"><span style="font-size:1.3rem;">✅</span></div>
+        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Bayar QRIS pertama kali</p><p style="font-size:.62rem;color:rgba(0,0,0,.32);margin-top:1px;">Diselesaikan 20 Jun 2025</p></div>
+        <span class="fredoka" style="color:var(--g);font-size:.88rem;">+10XP</span>
+      </div>
+      <div class="mission-card" style="opacity:.6;">
+        <div class="m-icon" style="background:#fefce8;"><span style="font-size:1.3rem;">✅</span></div>
+        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Login 7 hari berturut-turut</p><p style="font-size:.62rem;color:rgba(0,0,0,.32);margin-top:1px;">Diselesaikan 22 Jun 2025</p></div>
+        <span class="fredoka" style="color:var(--y);font-size:.88rem;">+20XP</span>
+      </div>
     </div>
 
-    <div class="tx-item">
-      <div class="tx-icon" style="background:#f0fdf4;"><span style="font-size:1.1rem;">🥛</span></div>
-      <div style="flex:1;min-width:0;">
-        <p style="font-size:0.78rem;font-weight:800;color:#111;">Beli Susu</p>
-        <p style="font-size:0.62rem;color:rgba(0,0,0,0.35);font-weight:600;">10:12 WIB · QRIS</p>
+    <!-- ===== TAB: TABUNGAN ===== -->
+    <div id="tab-tabungan" class="tab-page">
+      <p style="font-size:1rem;font-weight:800;color:#111;margin-bottom:4px;">Celengan Digital 🐷</p>
+      <p style="font-size:.72rem;color:rgba(0,0,0,.35);margin-bottom:16px;">Kumpulkan uang untuk impianmu!</p>
+      <div style="background:linear-gradient(140deg,#7B2FBE,#2d4a9b);border-radius:22px;padding:20px;margin-bottom:16px;text-align:center;">
+        <p style="color:rgba(255,255,255,.55);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Total Tabungan</p>
+        <p class="fredoka" style="color:var(--y);font-size:2.8rem;line-height:1;">Rp45.000</p>
+        <p style="color:rgba(255,255,255,.4);font-size:.65rem;margin-top:5px;">dari target Rp100.000 🎯</p>
+        <div style="background:rgba(255,255,255,.18);border-radius:999px;height:8px;overflow:hidden;margin-top:10px;"><div style="width:45%;height:100%;background:var(--y);border-radius:999px;"></div></div>
+        <button onclick="showPhoneToast('🐷','Nabung!','Kamu berhasil nabung Rp5.000! Terus semangat! 🎉','success')" style="margin-top:14px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:13px;padding:10px 20px;cursor:pointer;font-size:.78rem;font-weight:800;font-family:inherit;">+ Nabung Sekarang</button>
       </div>
-      <span style="font-size:0.8rem;font-weight:800;color:#ef4444;">−Rp5.000</span>
+      <p class="sec-lbl">🎯 Target Impian</p>
+      <div class="mission-card">
+        <div class="m-icon" style="background:#fef9c3;">🎮</div>
+        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Nintendo Switch Lite</p><div style="background:#fefce8;border-radius:999px;height:5px;margin-top:5px;overflow:hidden;"><div style="width:15%;height:100%;background:var(--y);border-radius:999px;"></div></div><p style="font-size:.6rem;color:rgba(0,0,0,.32);margin-top:2px;font-weight:600;">Rp45.000 dari Rp300.000</p></div>
+      </div>
+      <div class="mission-card">
+        <div class="m-icon" style="background:#eff6ff;">📚</div>
+        <div style="flex:1;"><p style="font-size:.78rem;font-weight:800;color:#111;">Buku Komik Doraemon Set</p><div style="background:#eff6ff;border-radius:999px;height:5px;margin-top:5px;overflow:hidden;"><div style="width:60%;height:100%;background:#60a5fa;border-radius:999px;"></div></div><p style="font-size:.6rem;color:rgba(0,0,0,.32);margin-top:2px;font-weight:600;">Rp30.000 dari Rp50.000</p></div>
+      </div>
     </div>
 
-  </div>
+    <!-- ===== TAB: PROFIL ===== -->
+    <div id="tab-profil" class="tab-page">
+      <!-- Profile header -->
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="background:linear-gradient(135deg,var(--o),var(--p));border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 10px;box-shadow:0 8px 24px rgba(255,107,53,0.4);">🎒</div>
+        <p style="font-size:1.05rem;font-weight:800;color:#111;">Dafi Pratama</p>
+        <p style="font-size:.72rem;color:rgba(0,0,0,.38);margin-top:2px;">Kelas 5A · SDN 01 Pasuruan</p>
+        <div style="display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,var(--o),var(--p));border-radius:99px;padding:4px 14px;margin-top:8px;">
+          <span style="font-size:.7rem;">⭐</span><span class="fredoka" style="color:#fff;font-size:.82rem;">Level 3 · Penabung Pemula</span>
+        </div>
+      </div>
+      <!-- Stats grid -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;">
+        <div class="prof-stat"><p class="fredoka" style="color:var(--o);font-size:1.3rem;">12</p><p style="font-size:.6rem;color:rgba(0,0,0,.38);font-weight:700;margin-top:1px;">Streak 🔥</p></div>
+        <div class="prof-stat"><p class="fredoka" style="color:var(--purple);font-size:1.3rem;">85</p><p style="font-size:.6rem;color:rgba(0,0,0,.38);font-weight:700;margin-top:1px;">Total XP ⭐</p></div>
+        <div class="prof-stat"><p class="fredoka" style="color:var(--g);font-size:1.3rem;">24</p><p style="font-size:.6rem;color:rgba(0,0,0,.38);font-weight:700;margin-top:1px;">Transaksi 💳</p></div>
+      </div>
+      <!-- Badges -->
+      <p class="sec-lbl">🏅 Koleksi Lencana</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;">
+        <div style="background:#fff;border-radius:14px;padding:10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);"><div style="font-size:1.5rem;margin-bottom:3px;">🌟</div><p style="font-size:.58rem;font-weight:800;color:rgba(0,0,0,.5);">Pemula</p></div>
+        <div style="background:#fff;border-radius:14px;padding:10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);"><div style="font-size:1.5rem;margin-bottom:3px;">📱</div><p style="font-size:.58rem;font-weight:800;color:rgba(0,0,0,.5);">QRIS Pro</p></div>
+        <div style="background:#fff;border-radius:14px;padding:10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);"><div style="font-size:1.5rem;margin-bottom:3px;">🔥</div><p style="font-size:.58rem;font-weight:800;color:rgba(0,0,0,.5);">Streak 7</p></div>
+        <div style="background:rgba(0,0,0,.04);border-radius:14px;padding:10px;text-align:center;border:2px dashed rgba(0,0,0,.1);opacity:.4;"><div style="font-size:1.5rem;margin-bottom:3px;">🏆</div><p style="font-size:.58rem;font-weight:800;color:rgba(0,0,0,.4);">Terkunci</p></div>
+      </div>
+      <button onclick="location.href='index.html'" style="width:100%;background:#fff;border:2px solid rgba(255,77,141,0.2);color:var(--p);border-radius:14px;padding:12px;font-size:.82rem;font-weight:800;font-family:inherit;cursor:pointer;">🚪 Keluar</button>
+    </div>
 
-  <!-- Bottom nav -->
+  </div><!-- end phone-body -->
+
+  <!-- BOTTOM NAV -->
   <div class="bottom-nav">
-    <div class="nav-item active">
-      <span style="font-size:1.3rem;">🏠</span>
-      <span style="font-size:0.6rem;font-weight:800;color:var(--orange);">Beranda</span>
-      <div class="nav-dot"></div>
-    </div>
-    <div class="nav-item">
-      <span style="font-size:1.3rem;">📋</span>
-      <span style="font-size:0.6rem;font-weight:700;color:rgba(0,0,0,0.3);">Riwayat</span>
-    </div>
-    <div class="nav-item">
-      <span style="font-size:1.3rem;">🗺️</span>
-      <span style="font-size:0.6rem;font-weight:700;color:rgba(0,0,0,0.3);">Misi</span>
-    </div>
-    <div class="nav-item">
-      <span style="font-size:1.3rem;">👤</span>
-      <span style="font-size:0.6rem;font-weight:700;color:rgba(0,0,0,0.3);">Profil</span>
-    </div>
+    <div class="nav-item active" id="nav-beranda"  onclick="switchTab('beranda')"><span style="font-size:1.25rem;">🏠</span><span style="font-size:.58rem;font-weight:800;color:var(--o);">Beranda</span><div class="nav-dot"></div></div>
+    <div class="nav-item"        id="nav-riwayat"  onclick="switchTab('riwayat')"><span style="font-size:1.25rem;">📋</span><span style="font-size:.58rem;font-weight:700;color:rgba(0,0,0,.3);">Riwayat</span></div>
+    <div class="nav-item"        id="nav-misi"     onclick="switchTab('misi')"><span style="font-size:1.25rem;">🗺️</span><span style="font-size:.58rem;font-weight:700;color:rgba(0,0,0,.3);">Misi</span></div>
+    <div class="nav-item"        id="nav-tabungan" onclick="switchTab('tabungan')"><span style="font-size:1.25rem;">🐷</span><span style="font-size:.58rem;font-weight:700;color:rgba(0,0,0,.3);">Nabung</span></div>
+    <div class="nav-item"        id="nav-profil"   onclick="switchTab('profil')"><span style="font-size:1.25rem;">👤</span><span style="font-size:.58rem;font-weight:700;color:rgba(0,0,0,.3);">Profil</span></div>
   </div>
 
-</div>
-<!-- END PHONE -->
+</div><!-- end phone -->
 
 <script>
-  const MAX_LIMIT = 20000;
-  let currentLimit = 20000;
-  let totalUsed    = 0;
+// ===== TAB SWITCHING =====
+const tabNames = ['beranda','riwayat','misi','tabungan','profil'];
+function switchTab(name){
+  tabNames.forEach(t=>{
+    document.getElementById('tab-'+t).classList.remove('active');
+    const nav = document.getElementById('nav-'+t);
+    nav.classList.remove('active');
+    nav.querySelector('span:last-child').style.color='rgba(0,0,0,.3)';
+    nav.querySelector('span:last-child').style.fontWeight='700';
+    const dot = nav.querySelector('.nav-dot');
+    if(dot) dot.remove();
+  });
+  document.getElementById('tab-'+name).classList.add('active');
+  const activeNav = document.getElementById('nav-'+name);
+  activeNav.classList.add('active');
+  const label = activeNav.querySelector('span:last-child');
+  label.style.color='var(--o)'; label.style.fontWeight='800';
+  if(!activeNav.querySelector('.nav-dot')){ const d=document.createElement('div'); d.className='nav-dot'; activeNav.appendChild(d); }
+  // Reset scroll
+  document.querySelector('.phone-body').scrollTop=0;
+}
 
-  const fmt = n => new Intl.NumberFormat('id-ID').format(n);
+// ===== LIMIT STATE =====
+const MAX=20000; let curLimit=20000, usedTotal=0;
+const fmt=n=>new Intl.NumberFormat('id-ID').format(n);
+function updateLimit(){
+  document.getElementById('limitDisp').textContent=fmt(curLimit);
+  document.getElementById('usedDisp').textContent='Rp'+fmt(usedTotal);
+  const pct=Math.max(curLimit/MAX*100,0);
+  const bar=document.getElementById('limitBar');
+  bar.style.width=pct+'%';
+  if(pct<=25) bar.style.background='#fca5a5';
+  else if(pct<=50) bar.style.background='rgba(255,214,10,0.9)';
+  else bar.style.background='rgba(255,255,255,0.88)';
+  document.getElementById('recSisa').textContent='Rp'+fmt(curLimit);
+}
 
-  function updateUI() {
-    document.getElementById('limitDisplay').textContent = fmt(currentLimit);
-    document.getElementById('usedDisplay').textContent  = 'Rp' + fmt(totalUsed);
-    const pct = Math.max((currentLimit / MAX_LIMIT) * 100, 0);
-    document.getElementById('limitBar').style.width = pct + '%';
+// ===== PHONE TOAST =====
+function showPhoneToast(icon,title,body,type='success'){
+  const area=document.getElementById('phoneToastArea');
+  const t=document.createElement('div');
+  const colors={success:'#06D6A0',error:'#FF4D8D',warn:'#FFD60A',info:'#818cf8'};
+  t.style.cssText=`background:rgba(15,30,61,0.95);border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:10px;border-left:4px solid ${colors[type]||colors.success};box-shadow:0 6px 20px rgba(0,0,0,0.3);transform:translateY(-14px) scale(.95);opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);margin:8px 0 0;pointer-events:all;`;
+  t.innerHTML=`<span style="font-size:1.3rem;">${icon}</span><div style="flex:1;min-width:0;"><p style="font-size:.75rem;font-weight:800;color:#fff;">${title}</p><p style="font-size:.65rem;color:rgba(255,255,255,.5);margin-top:1px;">${body}</p></div><span onclick="this.closest('div').remove()" style="color:rgba(255,255,255,.35);cursor:pointer;font-size:.9rem;padding:0 2px;">✕</span>`;
+  area.appendChild(t);
+  requestAnimationFrame(()=>{ t.style.transform='translateY(0) scale(1)'; t.style.opacity='1'; });
+  setTimeout(()=>{ t.style.transform='translateY(-10px) scale(.95)'; t.style.opacity='0'; setTimeout(()=>t.remove(),300); },4000);
+}
 
-    // Color shift
-    const bar = document.getElementById('limitBar');
-    if (pct <= 25)      bar.style.background = '#f87171';
-    else if (pct <= 50) bar.style.background = '#fbbf24';
-    else                bar.style.background = 'rgba(255,255,255,0.9)';
+// ===== COIN POP =====
+function spawnCoins(){
+  const ph=document.getElementById('phoneRoot');
+  ['🪙','⭐','✨'].forEach((e,i)=>{
+    const c=document.createElement('div'); c.className='coin-pop'; c.textContent=e;
+    c.style.left=(80+Math.random()*200)+'px'; c.style.bottom=(90+Math.random()*80)+'px'; c.style.animationDelay=(i*.1)+'s';
+    ph.appendChild(c); setTimeout(()=>c.remove(),1100);
+  });
+}
 
-    // Shake
-    const el = document.getElementById('limitDisplay');
-    el.classList.remove('shake-anim');
-    void el.offsetWidth;
-    el.classList.add('shake-anim');
+// ===== SCAN QRIS =====
+let scanning=false;
+function buildFakeQR(){
+  const qr=document.getElementById('fakeQr');
+  qr.innerHTML='';
+  const pattern=[1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,0,1,0,1,0,1,1,0,1,0,1,0,1,1,0,1,0,1,0,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,1,1,0,0,1,0,1,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,1,0,1,0,1,1,0,0];
+  for(let i=0;i<49;i++){
+    const c=document.createElement('div'); c.className='qr-cell';
+    c.style.cssText=`width:18px;height:18px;border-radius:2px;background:${pattern[i%pattern.length]?'#111':'#fff'};`;
+    qr.appendChild(c);
+  }
+}
+
+function startScan(){
+  if(scanning) return;
+  scanning=true;
+  const btn=document.getElementById('scanBtn');
+  btn.disabled=true; btn.style.opacity='.5';
+  const overlay=document.getElementById('camOverlay');
+  const camText=document.getElementById('camText');
+  const camSub=document.getElementById('camSub');
+  const merchantInfo=document.getElementById('merchantInfo');
+  const detectFlash=document.getElementById('detectFlash');
+  const laser=document.getElementById('scanLaser');
+  const fakeQr=document.getElementById('fakeQr');
+
+  // Reset state
+  merchantInfo.style.opacity='0'; fakeQr.classList.remove('show'); detectFlash.style.animation='';
+
+  overlay.classList.add('show');
+  buildFakeQR();
+
+  // Build fake camera feed (colored blobs)
+  const feed=document.getElementById('camFeed');
+  feed.innerHTML='';
+  const blobColors=['rgba(255,107,53,0.3)','rgba(255,77,141,0.25)','rgba(123,47,190,0.2)','rgba(6,214,160,0.2)','rgba(255,214,10,0.15)'];
+  for(let i=0;i<8;i++){
+    const b=document.createElement('div');
+    b.style.cssText=`position:absolute;width:${80+Math.random()*120}px;height:${80+Math.random()*120}px;border-radius:50%;background:${blobColors[i%blobColors.length]};filter:blur(${30+Math.random()*20}px);top:${Math.random()*80}%;left:${Math.random()*80}%;`;
+    feed.appendChild(b);
+  }
+  // Add some "noise" particles
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');
+    p.style.cssText=`position:absolute;width:${1+Math.random()*3}px;height:${1+Math.random()*3}px;background:rgba(255,255,255,${0.1+Math.random()*0.3});border-radius:50%;top:${Math.random()*100}%;left:${Math.random()*100}%;`;
+    feed.appendChild(p);
   }
 
-  function spawnCoinPop() {
-    const phone = document.getElementById('phoneRoot');
-    for (let i = 0; i < 5; i++) {
-      const coin = document.createElement('div');
-      coin.className = 'coin-pop';
-      coin.textContent = ['🪙','⭐','✨'][i % 3];
-      coin.style.left   = (60 + Math.random()*200) + 'px';
-      coin.style.bottom = (80 + Math.random()*100) + 'px';
-      coin.style.animationDelay = (i * 0.1) + 's';
-      phone.appendChild(coin);
-      setTimeout(() => coin.remove(), 1200);
-    }
+  camText.textContent='Membuka Kamera...';
+  camSub.textContent='Siapkan kode QRIS-nya ya!';
+
+  // Timeline
+  setTimeout(()=>{ camText.textContent='Mencari Kode QRIS...'; camSub.textContent='Arahkan ke kode QRIS merchant'; },900);
+  setTimeout(()=>{ fakeQr.classList.add('show'); },1600);
+  setTimeout(()=>{
+    // Detected!
+    detectFlash.style.animation='flashGreen .6s ease forwards';
+    camText.textContent='QRIS Terdeteksi! ✅';
+    camText.style.color='#06D6A0';
+    camSub.textContent='Memproses pembayaran...';
+    merchantInfo.style.opacity='1';
+    laser.style.animationPlayState='paused';
+    laser.style.background='linear-gradient(90deg,transparent,#06D6A0,transparent)';
+  },2400);
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    camText.style.color='#fff';
+    laser.style.animationPlayState='running'; laser.style.background='';
+
+    // Deduct
+    const deduct=10000;
+    curLimit-=deduct; usedTotal+=deduct;
+    updateLimit(); spawnCoins();
+
+    // Show receipt
+    document.getElementById('receiptOverlay').classList.add('show');
+
+    btn.disabled=false; btn.style.opacity='1';
+    scanning=false;
+  },3600);
+}
+
+function cancelScan(){
+  document.getElementById('camOverlay').classList.remove('show');
+  document.getElementById('scanBtn').disabled=false;
+  document.getElementById('scanBtn').style.opacity='1';
+  document.getElementById('camText').style.color='#fff';
+  scanning=false;
+}
+
+function closeReceipt(){
+  document.getElementById('receiptOverlay').classList.remove('show');
+  showPhoneToast('✅','Pembayaran Berhasil!','Rp10.000 dibayar di Kantin Bu Yati. Sisa limit Rp'+fmt(curLimit),'success');
+}
+
+// ===== HISTORY FILTER =====
+function filterHist(el,type){
+  document.querySelectorAll('.hist-fil').forEach(f=>{ f.style.background='#fff'; f.style.color='rgba(0,0,0,.45)'; });
+  el.style.background='var(--o)'; el.style.color='#fff';
+  document.querySelectorAll('#histList .hist-item').forEach(r=>{ r.style.display=(type==='semua'||r.dataset.t===type)?'flex':'none'; });
+}
+
+// ===== PHONE TOUR =====
+const phoneTourSteps=[
+  { icon:'👋', title:'Halo Dafi!', body:'Ini adalah aplikasi KOIN kamu! Di sini kamu bisa bayar jajan pakai QRIS, lihat sisa uang, dan selesaikan misi seru.', target:null },
+  { icon:'💰', title:'Sisa Limit Jajan', body:'Bar ini menunjukkan berapa sisa uang jajan kamu hari ini. Kalau sudah habis, kamu nggak bisa bayar lagi ya!', target:'balCard' },
+  { icon:'📷', title:'Tombol SCAN QRIS', body:'Tekan tombol besar ini untuk bayar di kantin, koperasi, atau warung yang punya QRIS. Mudah banget!', target:'scanArea' },
+  { icon:'🗺️', title:'Misi & Tantangan', body:'Selesaikan misi untuk dapetin XP dan naik level! Ada hadiah keren menanti kamu. Cek tab Misi ya!', target:null },
+  { icon:'🏆', title:'Siap Bertualang!', body:'Kamu sudah siap pakai KOIN! Jangan lupa hemat ya, biar bisa nabung buat impian kamu. Semangat! 🌟', target:null },
+];
+let phoneTourIdx=0;
+
+function startPhoneTour(){
+  document.getElementById('phoneOverlay').style.display='block';
+  phoneTourIdx=0;
+  renderPhoneTour();
+}
+function renderPhoneTour(){
+  const step=phoneTourSteps[phoneTourIdx];
+  document.getElementById('ptIcon').textContent=step.icon;
+  document.getElementById('ptTitle').textContent=step.title;
+  document.getElementById('ptBody').textContent=step.body;
+  document.getElementById('ptNext').textContent=phoneTourIdx===phoneTourSteps.length-1?'Mulai! 🚀':'Lanjut →';
+  const dots=document.getElementById('ptDots');
+  dots.innerHTML=phoneTourSteps.map((_,i)=>`<div style="width:6px;height:6px;border-radius:50%;background:${i===phoneTourIdx?'var(--y)':'rgba(255,255,255,0.2)'}"></div>`).join('');
+
+  // Position card
+  const card=document.getElementById('phoneTourCard');
+  const target=step.target?document.getElementById(step.target):null;
+  if(target){
+    const r=target.getBoundingClientRect();
+    const phoneR=document.getElementById('phoneRoot').getBoundingClientRect();
+    const relTop=r.top-phoneR.top;
+    card.style.top=Math.min(relTop+r.height+12, 560)+'px';
+  } else {
+    card.style.top='220px';
   }
+  card.classList.remove('show');
+  setTimeout(()=>card.classList.add('show'),50);
+}
+function phoneTourNext(){
+  phoneTourIdx++;
+  if(phoneTourIdx>=phoneTourSteps.length){ endPhoneTour(); return; }
+  document.getElementById('phoneTourCard').classList.remove('show');
+  setTimeout(renderPhoneTour,200);
+}
+function endPhoneTour(){
+  document.getElementById('phoneOverlay').style.display='none';
+  document.getElementById('phoneTourCard').classList.remove('show');
+  showPhoneToast('🎉','Tur Selesai!','Selamat! Kamu sudah siap pakai KOIN. Semangat hemat!','success');
+}
 
-  function startScan() {
-    const btn     = document.getElementById('scanBtn');
-    const overlay = document.getElementById('camOverlay');
-    const camText = document.getElementById('camText');
-
-    btn.disabled = true;
-    btn.style.opacity = '0.5';
-    overlay.classList.add('show');
-    camText.textContent = 'Membuka Kamera...';
-
-    setTimeout(() => { camText.textContent = 'Mendeteksi QRIS...'; }, 900);
-
-    setTimeout(() => {
-      overlay.classList.remove('show');
-      const deduct = 10000;
-      currentLimit -= deduct;
-      totalUsed    += deduct;
-
-      alert(`✅ Pembayaran QRIS Sukses!\nSisa limit jajan berkurang Rp${fmt(deduct)}.`);
-
-      updateUI();
-      spawnCoinPop();
-
-      btn.disabled = false;
-      btn.style.opacity = '1';
-    }, 2000);
-  }
+// Auto start tour
+window.addEventListener('load',()=>{
+  setTimeout(startPhoneTour,800);
+});
 </script>
 </body>
 </html>
