@@ -25,7 +25,8 @@
       --card:rgba(255,255,255,0.04); --border:rgba(255,255,255,0.08);
     }
     *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--navy);color:#fff;display:flex;min-height:100vh;overflow:hidden;}
+    /* PERBAIKAN SCROLLING: height 100dvh dan width 100vw untuk mengunci layar */
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--navy);color:#fff;display:flex;height:100dvh;width:100vw;overflow:hidden;}
     .fredoka{font-family:'Fredoka One',cursive;}
     ::-webkit-scrollbar{width:4px; height:4px;} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
 
@@ -47,7 +48,7 @@
     .stat-card.pink{background:linear-gradient(135deg,rgba(255,77,141,0.1),rgba(255,77,141,0.03));border-color:rgba(255,77,141,0.18);}
 
     /* TABLE */
-    .table-wrap{overflow-x:auto; width:100%;}
+    .table-wrap{overflow-x:auto; width:100%; -webkit-overflow-scrolling:touch;}
     .dt{width:100%;border-collapse:collapse; min-width:600px;}
     .dt th{padding:9px 14px;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.28);border-bottom:1px solid var(--border);text-align:left;}
     .dt td{padding:12px 14px;font-size:0.8rem;border-bottom:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.78);}
@@ -151,7 +152,7 @@
       #mob-overlay{display:block!important;}
       
       .grid-2, .grid-ai {grid-template-columns:1fr;}
-      main {padding: 20px 5% 100px !important;} /* Extra bottom padding for mobile scrolling */
+      main {padding: 20px 5% 120px !important;} /* Padding bawah diekstrasin biar tombol paling bawah gak ketutup navigasi HP */
       #topbar {padding: 0 5%;}
     }
   </style>
@@ -225,7 +226,8 @@
 <div id="mob-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:45;" onclick="toggleSidebar()"></div>
 
 <!-- ===== MAIN ===== -->
-<div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;">
+<!-- PERBAIKAN SCROLLING: min-height diganti ke 0 biar container ini nggak nge-push kebawah dan biarin bagian dalam (mainScrollArea) yg scroll -->
+<div style="flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;">
 
   <header id="topbar">
     <div style="display:flex;align-items:center;gap:14px;">
@@ -246,7 +248,8 @@
     </div>
   </header>
 
-  <div style="flex:1;overflow-y:auto;overflow-x:hidden;">
+  <!-- PERBAIKAN SCROLLING: Area spesifik buat digeser ke bawah -->
+  <div id="mainScrollArea" style="flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;">
   <main style="padding:24px 28px;max-width:1100px;width:100%;margin:0 auto;">
 
     <!-- ======= PAGE: RINGKASAN ======= -->
@@ -567,6 +570,7 @@ function showPage(name){
   document.getElementById('nav-'+name).classList.add('active');
   document.getElementById('pageTitle').textContent = titles[name];
   if(window.innerWidth<768) { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mob-overlay').style.display='none'; }
+  document.getElementById('mainScrollArea').scrollTop = 0;
 }
 
 // ===== TOAST SYSTEM =====
@@ -742,7 +746,12 @@ function renderTourStep(){
 
     setTimeout(()=>card.classList.add('show'), 50);
 
-    target.scrollIntoView({behavior:'smooth',block:'nearest'});
+    // Scroll element to view specifically inside our scroll area if on mobile
+    if(window.innerWidth<=768 && !step.targetId.startsWith('nav-')) {
+       document.getElementById('mainScrollArea').scrollBy({ top: r.top - 100, behavior: 'smooth' });
+    } else {
+       target.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
   }
 
   if(step.targetId.startsWith('nav-')){
