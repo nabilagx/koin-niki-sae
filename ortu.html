@@ -149,7 +149,6 @@
     @media(max-width:768px){
       #sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .25s;}
       #sidebar.open{transform:translateX(0);}
-      #mob-overlay{display:block!important;}
       
       .grid-2, .grid-ai {grid-template-columns:1fr;}
       main {padding: 20px 5% 120px !important;} /* Padding bawah diekstrasin biar tombol paling bawah gak ketutup navigasi HP */
@@ -569,7 +568,7 @@ function showPage(name){
   document.getElementById('page-'+name).classList.add('active');
   document.getElementById('nav-'+name).classList.add('active');
   document.getElementById('pageTitle').textContent = titles[name];
-  if(window.innerWidth<768) { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mob-overlay').style.display='none'; }
+  if(window.innerWidth<=768) { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mob-overlay').style.display='none'; }
   document.getElementById('mainScrollArea').scrollTop = 0;
 }
 
